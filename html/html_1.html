@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Первая страница</title>
+</head>
+<body>
+<h1>
+    Первая html страница
+</h1>
+
+<form action="/test" method="post">
+    <label>
+        <input type="radio" value="1" name="radio">Радио-баттон 1
+    </label>
+    <label>
+        <input type="radio" value="2" name="radio">Радио-баттон 2
+    </label>
+    <label>
+        <input type="radio" value="3" name="radio">Радио-баттон 3
+    </label>
+
+    <br>
+    <hr>
+
+    <label>
+        <input type="checkbox" value="1" name="checkbox-1"> Чекбокс 1
+    </label>
+    <label>
+        <input type="checkbox" value="2" name="checkbox-2"> Чекбокс 2
+    </label>
+    <label>
+        <input type="checkbox" value="3" name="checkbox-3"> Чекбокс 3
+    </label>
+
+    <br>
+    <hr>
+
+    <label for="single-selection-list">Список с единичным выбором</label>
+    <select id="single-selection-list" name="selection">
+        <option>Элемент списка 1</option>
+        <option>Элемент списка 2</option>
+        <option>Элемент списка 3</option>
+    </select>
+
+    <br>
+    <hr>
+
+    <label for="multiple-choice-list">Список с множественным выбором</label>
+    <select multiple="multiple" id="multiple-choice-list" size="3" name="selections">
+        <option>Элемент списка 1</option>
+        <option>Элемент списка 2</option>
+        <option>Элемент списка 3</option>
+    </select>
+
+    <br>
+    <hr>
+
+    <label>
+        Введите текст <input type="text" placeholder="Текст" name="text">
+    </label>
+
+    <br>
+    <hr>
+
+    <label for="text-area">Многострочное поле ввода</label>
+    <textarea id="text-area" name="text-area" placeholder="Введите несколько строк"></textarea>
+
+    <br>
+    <hr>
+
+    <button type="submit">Отправить</button>
+    
+</form>
+<a href="html_2.html">Переход на вторую страницу</a>
+</body>
+</html>
