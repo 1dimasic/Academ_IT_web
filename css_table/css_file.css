@@ -1,0 +1,38 @@
+* {
+    box-sizing: border-box;
+}
+
+td, th {
+    font-family: Calibri serif;
+    font-size: 20px;
+    font-stretch: ultra-expanded;
+    height: 45px;
+    padding: 10px 10px;
+}
+
+td {
+    border: 1px solid #CECECE;
+}
+
+th {
+    text-align: left;
+    border: 1px solid #ABD8F5;
+    color: #FFFFFF;
+    background-color: #3598DB;
+}
+
+tr:nth-child(odd) {
+    background-color: #EEEEEE;
+}
+
+.col-1-2 {
+    width: 175px;
+}
+
+.col-3 {
+    width: 310px;
+}
+
+.col-4 {
+    width: 200px;
+}
