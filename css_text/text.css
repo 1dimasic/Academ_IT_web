@@ -4,22 +4,23 @@
 
 .header {
     font-size: 28px;
-    margin-bottom: 14px;
+    padding-bottom: 14px;
 }
 
 .sub-blocks {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
+    color: #67656C;
 }
 
 .main {
-    width: 770px;
-    height: 380px;
+    width: 745px;
+    height: 425px;
     padding: 12px;
     background-color: #FEEED5;
 }
 
-[color="blue"] {
-    color: #688A94;
+.blue {
+    color: #278DB2;
     font-weight: 600;
 }
 
@@ -34,10 +35,10 @@
 .content {
     text-indent: 15px;
     font-size: 15px;
-    line-height: 18px;
     text-align: justify;
 }
 
-.font-size-17 {
+.font-size-and-line-height {
     font-size: 17px;
+    line-height: 1.45;
 }
