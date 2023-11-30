@@ -1,0 +1,41 @@
+* {
+    box-sizing: border-box;
+}
+
+.font {
+    font-family: Calibri, sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.header > th {
+    text-align: left;
+    border: 1px solid #ABD8F5;
+    color: #FFF;
+    background-color: #3598DB;
+}
+
+.table-body td, th {
+    height: 40px;
+    padding: 14px 12px 12px;
+}
+
+.table-body td {
+    border: 1px solid #CECECE;
+}
+
+.table-body tr:nth-child(odd) {
+    background-color: #EEE;
+}
+
+.name {
+    width: 175px;
+}
+
+.title {
+    width: 310px;
+}
+
+.twitter {
+    width: 200px;
+}
