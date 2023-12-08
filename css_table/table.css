@@ -2,29 +2,28 @@
     box-sizing: border-box;
 }
 
-.font {
+body {
     font-family: Calibri, sans-serif;
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 500;
 }
 
-.header > th {
-    text-align: left;
+.table th {
+    height: 49px;
+    padding: 14px 12px 12px;
     border: 1px solid #ABD8F5;
     color: #FFF;
     background-color: #3598DB;
+    text-align: left;
 }
 
-.table-body td, th {
-    height: 40px;
+.table td {
+    height: 52px;
     padding: 14px 12px 12px;
-}
-
-.table-body td {
     border: 1px solid #CECECE;
 }
 
-.table-body tr:nth-child(odd) {
+.table tr:nth-child(odd) {
     background-color: #EEE;
 }
 
@@ -32,7 +31,7 @@
     width: 175px;
 }
 
-.title {
+.job-title {
     width: 310px;
 }
 
