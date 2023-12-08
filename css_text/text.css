@@ -3,23 +3,25 @@
 }
 
 .header {
-    font-size: 28px;
-    padding-bottom: 14px;
+    font-size: 27px;
+    line-height: 32px;
+    margin-bottom: 10px;
 }
 
 .sub-blocks {
-    margin-bottom: 5px;
-    color: #67656C;
+    margin-bottom: 8px;
 }
 
 .main {
-    width: 745px;
-    height: 425px;
-    padding: 12px;
+    max-width: 745px;
+    width: 100%;
+    padding: 10px 12px 5px;
     background-color: #FEEED5;
+    font-family: Helvetica, sans-serif;
+    color: #67656C;
 }
 
-.blue {
+.blue-text {
     color: #278DB2;
     font-weight: 600;
 }
@@ -28,17 +30,15 @@
     text-decoration: line-through;
 }
 
-.main_font {
-    font-family: Helvetica, sans-serif;
-}
-
 .content {
     text-indent: 15px;
     font-size: 15px;
     text-align: justify;
+    line-height: 1.45;
+    margin-bottom: 10px;
 }
 
 .font-size-and-line-height {
     font-size: 17px;
-    line-height: 1.45;
+    line-height: 1.23;
 }
