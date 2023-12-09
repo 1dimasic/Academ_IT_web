@@ -1,0 +1,59 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Calibri, sans-serif;
+}
+
+.parent {
+    background-color: #327983;
+}
+
+.child {
+    background-color: #4E5B6B;
+    height: 100vh;
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    outline: white solid 3px;
+}
+
+.child > h3 {
+    font-size: 26px;
+    font-weight: 700;
+    padding: 10px;
+}
+
+.input {
+    max-width: 400px;
+    width: 100%;
+    padding: 4px;
+    margin: 10px;
+    text-align: center;
+}
+
+.input::placeholder {
+    text-align: center;
+}
+
+.button {
+    background-color: #234257;
+    max-width: 400px;
+    width: 100%;
+    font-family: Calibri, sans-serif;
+    font-size: 18px;
+    padding: 10px 5px;
+    font-weight: 500;
+}
+
+.output_message {
+    padding: 10px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.font_color {
+    color: #FEEED5;
+}
