@@ -1,0 +1,100 @@
+* {
+    box-sizing: border-box;
+}
+
+.parent {
+    background-color: #C7A98D;
+}
+
+.child {
+    background-color: #E4D9CA;
+    min-height: 100vh;
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    outline: white solid 3px;
+}
+
+.child > h3 {
+    font-size: 26px;
+    font-weight: 700;
+    padding: 10px;
+}
+
+.new_task {
+    max-width: 700px;
+    width: 90%;
+    padding: 8px;
+    margin: 6px;
+    text-align: center;
+    border: 0;
+    font-size: 22px;
+    border-radius: 20px;
+}
+
+.new_task:focus {
+    outline: none;
+}
+
+.button {
+    background-color: #C9B597;
+    font-size: 18px;
+    padding: 10px 5px;
+    font-weight: 600;
+    border: 0;
+    border-radius: 20px;
+    float: right;
+    margin-right: 20px;
+    margin-top: 12px;
+}
+
+body * {
+    color: #4B5475;
+    font-family: Calibri, sans-serif;
+}
+
+.todo_list {
+    margin: 65px 20px 20px;
+    text-align: left;
+}
+
+.todo_item {
+    font-size: 22px;
+    word-break: break-all;
+    margin-bottom: 10px;
+}
+
+.todo_item > button {
+    background-color: #C9B597;
+    font-size: 18px;
+    font-weight: 500;
+    border: 0;
+    border-radius: 20px;
+    float: right;
+    margin-left: 5px;
+}
+
+.error_message {
+    color: darkred;
+    display: none;
+}
+
+.invalid ~ .error_message {
+    display: block;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.edit_task_field {
+    font-size: 20px;
+    text-align: center;
+    min-width: 200px;
+    margin-bottom: 5px;
+    border-radius: 20px;
+    border: 0;
+}
+
+.edit_task_field:focus {
+    outline: none;
+}
