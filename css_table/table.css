@@ -9,8 +9,7 @@ body {
 }
 
 .table th {
-    height: 49px;
-    padding: 14px 12px 12px;
+    padding: 12px;
     border: 1px solid #ABD8F5;
     color: #FFF;
     background-color: #3598DB;
@@ -18,8 +17,7 @@ body {
 }
 
 .table td {
-    height: 52px;
-    padding: 14px 12px 12px;
+    padding: 14px 12px;
     border: 1px solid #CECECE;
 }
 
