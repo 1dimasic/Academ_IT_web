@@ -9,7 +9,7 @@ body {
 }
 
 .table th {
-    padding: 12px;
+    padding: 12px 12px 11px;
     border: 1px solid #ABD8F5;
     color: #FFF;
     background-color: #3598DB;
