@@ -1,41 +1,34 @@
 document.addEventListener("DOMContentLoaded", function () {
-
-
     const form = document.getElementById("form");
-    const celsius = document.getElementById("celsius");
-    const kelvin = document.getElementById("kelvin");
-    const fahrenheit = document.getElementById("fahrenheit");
+    const inputCelsius = document.getElementById("celsius");
+    const outputKelvin = document.getElementById("kelvin");
+    const outputFahrenheit = document.getElementById("fahrenheit");
 
     form.addEventListener("submit", function (e) {
         e.preventDefault();
-        kelvin.textContent = "";
-        fahrenheit.textContent = "";
-        let celsius_temperature = celsius.value.trim();
 
-        if (celsius_temperature.length === 0) {
+        outputKelvin.textContent = "";
+        outputFahrenheit.textContent = "";
+        let celsiusTemperature = inputCelsius.value.trim();
+        inputCelsius.classList.remove("invalid");
+
+        if (celsiusTemperature.length === 0 || isNaN(Number(celsiusTemperature))) {
+            inputCelsius.classList.add("invalid");
             return;
         }
 
-        celsius_temperature = Number(celsius_temperature);
+        const kelvinTemperature = Number(celsiusTemperature) + 273.15;
+        const fahrenheitTemperature = Number(celsiusTemperature) * 1.8 + 32;
 
-        if (isNaN(celsius_temperature)) {
-            celsius.value = "";
-            return;
-        }
+        const kelvinOutputMessage = document.createElement("kelvin");
+        kelvinOutputMessage.textContent = "Температура по шкале Кельвина: " +
+            kelvinTemperature.toFixed(2).toString();
 
-        const kelvin_temperature = Number(celsius_temperature) + 273.15;
-        const fahrenheit_temperature = Number(celsius_temperature) * 1.8 + 32;
+        const fahrenheitOutputMessage = document.createElement("fahrenheit");
+        fahrenheitOutputMessage.textContent = "Температура по шкале Фаренгейта: " +
+            fahrenheitTemperature.toFixed(2).toString();
 
-        const kelvin_output_message = document.createElement("label");
-        kelvin_output_message.textContent = "Температура по шкале Кельвина - " +
-            String(Math.floor(kelvin_temperature * 100) / 100);
-
-        const fahrenheit_output_message = document.createElement("label");
-        fahrenheit_output_message.textContent = "Температура по шкале Фаренгейта - " +
-            String(Math.floor(fahrenheit_temperature * 100) / 100);
-
-        kelvin.appendChild(kelvin_output_message);
-        fahrenheit.appendChild(fahrenheit_output_message);
-        celsius.value = "";
+        outputKelvin.appendChild(kelvinOutputMessage);
+        outputFahrenheit.appendChild(fahrenheitOutputMessage);
     });
 });

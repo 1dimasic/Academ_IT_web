@@ -12,14 +12,13 @@
     <div class="child font_color">
         <h3>Конвертер температур</h3>
         <form id="form">
-            <label class="font_color">
-                Введите температуру по шкале Цельсия:
-                <input type="text" class="input" id="celsius" placeholder="Температура по шкале Цельсия">
-            </label>
+            <label class="font_color">Введите температуру по шкале Цельсия:</label>
+            <input type="text" class="input" id="celsius" placeholder="Температура по шкале Цельсия">
+            <div class="error_message">Некорректное значение</div>
             <button class="button font_color">Конвертировать температуру</button>
         </form>
-        <div class="output_message font_color" id="kelvin"></div>
-        <div class="output_message font_color" id="fahrenheit"></div>
+        <div class="output_message" id="kelvin"></div>
+        <div class="output_message" id="fahrenheit"></div>
     </div>
 </div>
 </body>
