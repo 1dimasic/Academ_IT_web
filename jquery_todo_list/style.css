@@ -1,0 +1,93 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    color: #4B5475;
+    font-family: Calibri, sans-serif;
+}
+
+.parent {
+    background-color: #7F7F81;
+}
+
+.child {
+    background-color: #C3BBAB;
+    min-height: 100vh;
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    outline: #EEE solid 3px;
+    padding: 5px;
+}
+
+.child > h1 {
+    font-size: 28px;
+    font-weight: 700;
+    padding: 10px;
+}
+
+input {
+    border: 0;
+    text-align: center;
+    border-radius: 20px;
+}
+
+input:focus {
+    outline: none;
+}
+
+.new_task {
+    max-width: 700px;
+    width: 90%;
+    padding: 8px;
+    margin: 6px;
+    font-size: 22px;
+}
+
+.edit_task_field {
+    font-size: 20px;
+    min-width: 450px;
+    margin-bottom: 2px;
+}
+
+.todo_list {
+    margin: 65px 20px 20px;
+    text-align: left;
+}
+
+.todo_item {
+    font-size: 22px;
+    word-break: break-all;
+    margin-bottom: 10px;
+}
+
+button {
+    background-color: #BDB9B5;
+    font-size: 16px;
+    font-weight: 600;
+    color: #4B5475;
+    border: 1px solid;
+    border-radius: 20px;
+    float: right;
+}
+
+button:focus {
+    outline: 1px solid #0156B0;
+}
+
+.add_button {
+    margin-right: 22px;
+    margin-top: 12px;
+    padding: 10px 5px;
+}
+
+.todo_item > button {
+    margin-left: 5px;
+    padding: 3px 5px;
+}
+
+.invalid {
+    border: 2px solid #703D40;
+}
