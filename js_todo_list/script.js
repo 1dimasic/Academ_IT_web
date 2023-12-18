@@ -1,61 +1,76 @@
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.querySelector(".form");
-    const new_task = document.querySelector(".new_task");
-    const todo_list = document.querySelector(".todo_list");
+    const newTask = document.querySelector(".new_task");
+    const todoList = document.querySelector(".todo_list");
 
     form.addEventListener("submit", function (e) {
         e.preventDefault();
 
-        let new_task_text = new_task.value.trim();
-        new_task.classList.remove("invalid");
+        let newTaskText = newTask.value.trim();
+        newTask.classList.remove("invalid");
 
-        if (new_task_text.length === 0) {
-            new_task.classList.add("invalid");
+        if (newTaskText.length === 0) {
+            newTask.classList.add("invalid");
             return;
         }
 
-        const added_task = document.createElement("li");
-        added_task.classList.add("todo_item");
+        const addedTask = document.createElement("li");
+        addedTask.classList.add("todo_item");
 
-        function set_view() {
-            added_task.innerHTML = `<span class="task_text"></span>
-            <button type="button" class="delete_button">Удалить</button>
-            <button type="button" class="edit_button">Редактировать</button>`;
+        function viewContactList() {
+            addedTask.innerHTML = `<span class="task_text"></span>
+                <button type="button" class="delete_button">Удалить</button>
+                <button type="button" class="edit_button">Редактировать</button>`;
 
-            added_task.querySelector(".task_text").textContent = new_task_text;
-            todo_list.append(added_task);
+            addedTask.querySelector(".task_text").textContent = newTaskText;
 
-            added_task.querySelector(".delete_button").addEventListener("click", function () {
-                added_task.remove();
+            if (addedTask.classList.contains("edit_task")) {
+                document.querySelector(".edit_task").parentNode.replaceChild(addedTask,
+                    document.querySelector(".edit_task"));
+                addedTask.classList.remove("edit_task");
+            } else {
+                todoList.append(addedTask);
+            }
+
+            addedTask.querySelector(".delete_button").addEventListener("click", function () {
+                addedTask.remove();
             });
 
-            added_task.querySelector(".edit_button").addEventListener("click", function () {
-                added_task.innerHTML = `<input type="text" class="edit_task_field">                            
-                <button type="button" class="cancel_button">Отменить</button>
-                <button type="button" class="save_button">Сохранить</button>
-                <span class="error_message">Введите текст задачи</span>`;
+            addedTask.querySelector(".edit_button").addEventListener("click", function () {
+                addedTask.classList.add("edit_task");
+                addedTask.innerHTML = `<input type="text" class="edit_task_field">                            
+                    <button type="button" class="cancel_button">Отменить</button>
+                    <button type="button" class="save_button">Сохранить</button>`;
 
-                const edit_task = added_task.querySelector(".edit_task_field");
-                edit_task.value = new_task_text;
+                const editTask = addedTask.querySelector(".edit_task_field");
+                editTask.value = newTaskText;
 
-                added_task.querySelector(".cancel_button").addEventListener("click", function () {
-                    set_view();
-                })
+                addedTask.querySelector(".cancel_button").addEventListener("click", function () {
+                    viewContactList();
+                });
 
-                added_task.querySelector(".save_button").addEventListener("click", function () {
-                    const edit_task_text = edit_task.value.trim();
-                    edit_task.classList.remove("invalid")
+                addedTask.querySelector(".save_button").addEventListener("click", function () {
+                    const editTaskText = editTask.value.trim();
+                    editTask.classList.remove("invalid");
 
-                    if (edit_task_text.length === 0) {
-                        edit_task.classList.add("invalid");
+                    if (editTaskText.length === 0) {
+                        editTask.classList.add("invalid");
                         return;
                     }
-                    new_task_text = edit_task_text;
-                    set_view();
-                })
+
+                    newTaskText = editTaskText;
+                    viewContactList();
+                });
+
+                document.addEventListener("keydown", function (e) {
+                    if (e.code === "Enter") {
+                        addedTask.querySelector(".save_button").click();
+                    }
+                });
             });
         }
-        set_view();
-        new_task.value = "";
+
+        viewContactList();
+        newTask.value = "";
     });
 });

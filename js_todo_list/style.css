@@ -2,24 +2,40 @@
     box-sizing: border-box;
 }
 
+body {
+    color: #4B5475;
+    font-family: Calibri, sans-serif;
+}
+
 .parent {
-    background-color: #C7A98D;
+    background-color: #7F7F81;
 }
 
 .child {
-    background-color: #E4D9CA;
+    background-color: #C3BBAB;
     min-height: 100vh;
     max-width: 800px;
     width: 100%;
     margin: 0 auto;
     text-align: center;
-    outline: white solid 3px;
+    outline: #EEE solid 3px;
+    padding: 5px;
 }
 
-.child > h3 {
-    font-size: 26px;
+.child > h1 {
+    font-size: 28px;
     font-weight: 700;
     padding: 10px;
+}
+
+input {
+    border: 0;
+    text-align: center;
+    border-radius: 20px;
+}
+
+input:focus {
+    outline: none;
 }
 
 .new_task {
@@ -27,31 +43,13 @@
     width: 90%;
     padding: 8px;
     margin: 6px;
-    text-align: center;
-    border: 0;
     font-size: 22px;
-    border-radius: 20px;
 }
 
-.new_task:focus {
-    outline: none;
-}
-
-.button {
-    background-color: #C9B597;
-    font-size: 18px;
-    padding: 10px 5px;
-    font-weight: 600;
-    border: 0;
-    border-radius: 20px;
-    float: right;
-    margin-right: 20px;
-    margin-top: 12px;
-}
-
-body * {
-    color: #4B5475;
-    font-family: Calibri, sans-serif;
+.edit_task_field {
+    font-size: 20px;
+    min-width: 450px;
+    margin-bottom: 2px;
 }
 
 .todo_list {
@@ -65,36 +63,31 @@ body * {
     margin-bottom: 10px;
 }
 
-.todo_item > button {
-    background-color: #C9B597;
-    font-size: 18px;
-    font-weight: 500;
-    border: 0;
+button {
+    background-color: #BDB9B5;
+    font-size: 16px;
+    font-weight: 600;
+    color: #4B5475;
+    border: 1px solid;
     border-radius: 20px;
     float: right;
+}
+
+button:focus {
+    outline: 1px solid #0156B0;
+}
+
+.add_button {
+    margin-right: 22px;
+    margin-top: 12px;
+    padding: 10px 5px;
+}
+
+.todo_item > button {
     margin-left: 5px;
+    padding: 3px 5px;
 }
 
-.error_message {
-    color: darkred;
-    display: none;
-}
-
-.invalid ~ .error_message {
-    display: block;
-    font-size: 18px;
-    font-weight: 500;
-}
-
-.edit_task_field {
-    font-size: 20px;
-    text-align: center;
-    min-width: 200px;
-    margin-bottom: 5px;
-    border-radius: 20px;
-    border: 0;
-}
-
-.edit_task_field:focus {
-    outline: none;
+.invalid {
+    border: 2px solid #703D40;
 }
