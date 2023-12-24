@@ -1,45 +1,52 @@
-(function () {
-    function sortArray() {
-        array.sort((e1, e2) => e2 - e1);
+const testArray = [2, 4, 5, 7, 1, 46, -25, 0, 4];
+
+sortDescendingArray(testArray);
+console.log("Descending sort array", testArray)
+
+const itemsCount = 5;
+const firstFiveItemsArray = getFirstFiveItemsArray(testArray, itemsCount);
+console.log("First five items array: ", firstFiveItemsArray);
+
+const lastFiveItemsArray = getLastFiveItemsArray(testArray, itemsCount);
+console.log("Last five items array: ", lastFiveItemsArray);
+
+const arrayEvenNumbersSum = getArrayEvenNumbersSum(testArray);
+console.log("Array even numbers sum = ", arrayEvenNumbersSum);
+
+const arrayEvenNumbersSquares = getArrayEvenNumbersSquares();
+console.log("Even numbers array squares: ", arrayEvenNumbersSquares);
+
+function sortDescendingArray(array) {
+    array.sort((e1, e2) => e2 - e1);
+}
+
+function getFirstFiveItemsArray(array, itemsCount) {
+    return array.slice(0, itemsCount);
+}
+
+function getLastFiveItemsArray(array, itemsCount) {
+    return array.slice(-itemsCount);
+}
+
+function getArrayEvenNumbersSum(array) {
+    return array
+        .filter(number => number % 2 === 0)
+        .reduce((sum, evenNumber) => sum + evenNumber, 0);
+}
+
+function getNumberArray(maxNumbersCount) {
+    const numberArray = [];
+
+    for (let i = 1; i <= maxNumbersCount; ++i) {
+        numberArray.push(i);
     }
 
-    function getFirstFiveArray() {
-        return array.slice(0, 5);
-    }
+    return numberArray;
+}
 
-    function getLastFiveArray() {
-        return array.slice(-5);
-    }
-
-    function getArrayEvenNumbersSum() {
-        return array.filter((e) => e % 2 === 0).reduce(
-            (even_number_1, even_number_2) => even_number_1 + even_number_2, 0);
-    }
-
-    function getSquaresEvenNumbersArray() {
-        const fromOneToHundredArray = [];
-
-        for (let i = 1; i <= 100; ++i) {
-            fromOneToHundredArray.push(i);
-        }
-
-        return fromOneToHundredArray.filter((e) => e % 2 === 0).map((e) => e * e);
-    }
-
-    const array = [2, 4, 5, 7, 1, 46, -25, 0, 4];
-
-    sortArray();
-    console.log(array);
-
-    const firstFiveArray = getFirstFiveArray();
-    console.log(firstFiveArray);
-
-    const lastFiveArray = getLastFiveArray();
-    console.log(lastFiveArray);
-
-    const arrayEvenNumbersSum = getArrayEvenNumbersSum();
-    console.log(arrayEvenNumbersSum);
-
-    const squaresEvenNumbersArray = getSquaresEvenNumbersArray();
-    console.log(squaresEvenNumbersArray);
-})();
+function getArrayEvenNumbersSquares() {
+    const maxNumbersCount = 100;
+    return getNumberArray(maxNumbersCount)
+        .filter(number => number % 2 === 0)
+        .map(evenNumber => evenNumber * evenNumber);
+}
