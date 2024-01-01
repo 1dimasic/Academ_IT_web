@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const addedTask = document.createElement("li");
         addedTask.classList.add("todo_item");
 
-        function viewContactList() {
+        function updateTodoList() {
             addedTask.innerHTML = `<span class="task_text"></span>
                 <button type="button" class="button delete_button">Удалить</button>
                 <button type="button" class="button edit_button">Редактировать</button>`;
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 editTask.value = newTaskText;
 
                 addedTask.querySelector(".cancel_button").addEventListener("click", function () {
-                    viewContactList();
+                    updateTodoList();
                 });
 
                 addedTask.querySelector(".save_button").addEventListener("click", function () {
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
                     newTaskText = editTaskText;
-                    viewContactList();
+                    updateTodoList();
                 });
 
                 editTask.addEventListener("keydown", function (e) {
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
 
-        viewContactList();
+        updateTodoList();
         newTask.value = "";
     });
 });
