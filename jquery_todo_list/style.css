@@ -28,28 +28,33 @@ body {
     padding: 10px;
 }
 
-input {
+.new_task {
     border: 0;
-    text-align: center;
+    text-align: left;
+    text-indent: 10px;
     border-radius: 20px;
+    padding: 8px;
+    margin: 6px 0;
+    font-size: 22px;
+    width: 95%;
 }
 
-input:focus {
+.new_task:focus {
     outline: none;
 }
 
-.new_task {
-    max-width: 700px;
-    width: 90%;
-    padding: 8px;
-    margin: 6px;
-    font-size: 22px;
-}
-
 .edit_task_field {
+    border: 0;
+    text-align: left;
+    text-indent: 10px;
+    border-radius: 20px;
     font-size: 20px;
     min-width: 450px;
     margin-bottom: 2px;
+}
+
+.edit_task_field:focus {
+    outline: none;
 }
 
 .todo_list {
@@ -63,7 +68,7 @@ input:focus {
     margin-bottom: 10px;
 }
 
-button {
+.button {
     background-color: #BDB9B5;
     font-size: 16px;
     font-weight: 600;
@@ -73,7 +78,7 @@ button {
     float: right;
 }
 
-button:focus {
+.button:focus {
     outline: 1px solid #0156B0;
 }
 
@@ -90,4 +95,23 @@ button:focus {
 
 .invalid {
     border: 2px solid #703D40;
+}
+
+.invalid::placeholder {
+    color: #703D40;
+    font-size: 18px;
+    font-weight: 700;
+    font-family: Calibri, sans-serif;
+}
+
+.error_message {
+    visibility: hidden;
+}
+
+.invalid.error_message {
+    color: #703D40;
+    font-weight: 700;
+    font-size: 18px;
+    visibility: visible;
+    border: 0;
 }
