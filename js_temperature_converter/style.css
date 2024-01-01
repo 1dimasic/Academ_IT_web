@@ -4,6 +4,7 @@
 
 body {
     font-family: Calibri, sans-serif;
+    color: #FEEED5;
 }
 
 .parent {
@@ -17,16 +18,16 @@ body {
     width: 100%;
     margin: 0 auto;
     text-align: center;
-    outline: white solid 3px;
+    outline: #FFF solid 3px;
 }
 
-.child > h3 {
+.child > h1 {
     font-size: 26px;
     font-weight: 700;
     padding: 10px;
 }
 
-.input {
+.input_celsius {
     max-width: 400px;
     width: 100%;
     padding: 4px;
@@ -34,8 +35,12 @@ body {
     margin-top: 5px;
 }
 
-.input::placeholder {
+.input_celsius::placeholder {
     text-align: center;
+}
+
+.input_celsius:focus {
+    outline: none;
 }
 
 .button {
@@ -46,25 +51,26 @@ body {
     font-size: 18px;
     padding: 10px 5px;
     font-weight: 500;
-    margin-top: 10px;
+    margin-top: 5px;
+    color: #FEEED5;
 }
 
-.output_message {
-    padding: 10px;
+.button:focus {
+    border-color: #FFF;
+}
+
+.output_message > div {
+    padding: 5px;
     font-size: 20px;
     font-weight: 600;
 }
 
-.font_color {
-    color: #FEEED5;
-}
-
 .error_message {
-    display: none;
+    visibility: hidden;
+    margin-top: 5px;
 }
 
-.invalid + .error_message {
-    display: block;
-    color: #FF252E;
-    margin-top: 10px;
+.invalid.error_message {
+    color: #F00F;
+    visibility: visible;
 }

@@ -1,8 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("form");
-    const inputCelsius = document.getElementById("celsius");
-    const outputKelvin = document.getElementById("kelvin");
-    const outputFahrenheit = document.getElementById("fahrenheit");
+    const inputCelsius = document.querySelector(".input_celsius");
+    const outputKelvin = document.querySelector(".output_kelvin");
+    const outputFahrenheit = document.querySelector(".output_fahrenheit");
+    const errorMessage = document.querySelector(".error_message");
 
     form.addEventListener("submit", function (e) {
         e.preventDefault();
@@ -10,25 +11,27 @@ document.addEventListener("DOMContentLoaded", function () {
         outputKelvin.textContent = "";
         outputFahrenheit.textContent = "";
         let celsiusTemperature = inputCelsius.value.trim();
-        inputCelsius.classList.remove("invalid");
+        errorMessage.classList.remove("invalid");
 
-        if (celsiusTemperature.length === 0 || isNaN(Number(celsiusTemperature))) {
-            inputCelsius.classList.add("invalid");
+        if (celsiusTemperature.length === 0) {
+            errorMessage.classList.add("invalid");
             return;
         }
 
-        const kelvinTemperature = Number(celsiusTemperature) + 273.15;
-        const fahrenheitTemperature = Number(celsiusTemperature) * 1.8 + 32;
+        celsiusTemperature = Number(celsiusTemperature);
 
-        const kelvinOutputMessage = document.createElement("kelvin");
-        kelvinOutputMessage.textContent = "Температура по шкале Кельвина: " +
+        if (isNaN(celsiusTemperature)) {
+            errorMessage.classList.add("invalid");
+            return;
+        }
+
+        const kelvinTemperature = celsiusTemperature + 273.15;
+        const fahrenheitTemperature = celsiusTemperature * 1.8 + 32;
+
+        outputKelvin.textContent = "Температура по шкале Кельвина: " +
             kelvinTemperature.toFixed(2).toString();
 
-        const fahrenheitOutputMessage = document.createElement("fahrenheit");
-        fahrenheitOutputMessage.textContent = "Температура по шкале Фаренгейта: " +
+        outputFahrenheit.textContent = "Температура по шкале Фаренгейта: " +
             fahrenheitTemperature.toFixed(2).toString();
-
-        outputKelvin.appendChild(kelvinOutputMessage);
-        outputFahrenheit.appendChild(fahrenheitOutputMessage);
     });
 });
