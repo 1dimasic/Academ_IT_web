@@ -1,58 +1,62 @@
 $(function () {
     const form = $(".form");
-    const inputName = $("#name");
-    const inputSurname = $("#surname");
-    const inputTelephoneNumber = $("#telephone-number");
+    const nameInput = $("#name");
+    const surnameInput = $("#surname");
+    const phoneNumberInput = $("#phone-number");
     const contacts = $(".contact-list");
+    const addButton = $(".add-button");
+    const deleteAllButton = $(".delete-all-button");
 
     form.submit(function (e) {
         e.preventDefault();
 
-        let name = inputName.val().trim();
-        let surname = inputSurname.val().trim();
-        let telephoneNumber = inputTelephoneNumber.val().trim();
+        let name = nameInput.val().trim();
+        let surname = surnameInput.val().trim();
+        let phoneNumber = phoneNumberInput.val().trim();
 
-        inputName.removeClass("invalid");
-        inputSurname.removeClass("invalid");
-        inputTelephoneNumber.removeClass("invalid, repeated-tel-number");
+        nameInput.removeClass("invalid");
+        surnameInput.removeClass("invalid");
+        phoneNumberInput.removeClass("invalid repeated-phone-number");
 
         if (name.length === 0) {
-            inputName.addClass("invalid");
+            nameInput.addClass("invalid");
         }
 
         if (surname.length === 0) {
-            inputSurname.addClass("invalid");
+            surnameInput.addClass("invalid");
         }
 
-        if (telephoneNumber.length === 0) {
-            inputTelephoneNumber.addClass("invalid");
+        if (phoneNumber.length === 0) {
+            phoneNumberInput.addClass("invalid");
+            $(".invalid").next(".error-message").text('Введите номер телефона');
         }
 
-        $(".telephone-number").each(function () {
-            if ($(this).text() === telephoneNumber) {
-                inputTelephoneNumber.addClass("repeated-tel-number");
+        $(".phone-number").each(function () {
+            if ($(this).text() === phoneNumber) {
+                phoneNumberInput.addClass("repeated-phone-number");
+                $(".repeated-phone-number").next(".error-message").text('Введен существующий номер');
             }
-        })
+        });
 
-        if (inputName.hasClass("invalid") || inputSurname.hasClass("invalid") ||
-            inputTelephoneNumber.hasClass("invalid") || inputTelephoneNumber.hasClass("repeated-tel-number")) {
+        if (nameInput.hasClass("invalid") || surnameInput.hasClass("invalid")
+            || phoneNumberInput.hasClass("invalid") || phoneNumberInput.hasClass("repeated-phone-number")) {
+            addButton.blur();
             return;
         }
 
         const contact = $("<tr>").addClass("contact");
 
-        function numbered() {
-            $(".id").each(function (i) {
+        function assignNumbers() {
+            $(".number").each(function (i) {
                 $(this).text(i + 1);
-            })
+            });
         }
 
-
-        function viewContactsList() {
-            contact.html(`<td class="id"></td>
-                         <td class="name"></td>
+        function initContactInViewMode() {
+            contact.html(`<td class="number"></td>
+                          <td class="name"></td>
                           <td class="surname"></td>
-                          <td class="telephone-number"></td>
+                          <td class="phone-number"></td>
                           <td>
                             <button type="button" class="edit-button in-table-button">Редактировать</button>
                             <button type="button" class="delete-button in-table-button">Удалить</button>
@@ -63,16 +67,16 @@ $(function () {
 
             contact.find(".name").text(name);
             contact.find(".surname").text(surname);
-            contact.find(".telephone-number").text(telephoneNumber);
+            contact.find(".phone-number").text(phoneNumber);
 
-            if (contact.hasClass("in-place")) {
-                contact.appendTo("in-place")
-                contact.removeClass("in-place");
+            if (contact.hasClass("contact-to-edit")) {
+                contact.appendTo("contact-to-edit")
+                contact.removeClass("contact-to-edit");
             } else {
                 contacts.append(contact);
             }
 
-            numbered();
+            assignNumbers();
 
             contact.find(".delete-button").click(function () {
                 $(".deletion-confirm").dialog({
@@ -84,7 +88,7 @@ $(function () {
                         "Удалить": function () {
                             contact.remove();
                             $(this).dialog("close");
-                            numbered();
+                            assignNumbers();
                         },
                         "Отменить": function () {
                             $(this).dialog("close");
@@ -94,117 +98,139 @@ $(function () {
             });
 
             contact.find(".edit-button").click(function () {
-                contact.addClass("in-place");
-                contact.html(`<td></td>
-                                  <td>
-                                    <input type="text" class="edit-name edit-input-style">
-                                   </td>    
-                                   <td>                      
-                                    <input type="text" class="edit-surname edit-input-style">
-                                   </td> 
-                                   <td>   
-                                    <input type="tel" class="edit-telephone-number edit-input-style">
-                                   </td>
-                                   <td> 
-                                  <button type="button" class="cancel-button in-table-button">Отменить</button>
-                                  <button type="button" class="save-button in-table-button">Сохранить</button>
-                                  </td>`);
+                contact.addClass("contact-to-edit");
+                const currentNumber = contact.find(".number").text();
+                contact.html(`<td class="number-column">
+                                <p class="current-number"></p>
+                              </td>
+                              <td>
+                                <input type="text" class="edit-name in-table-input">
+                              </td>    
+                              <td>                      
+                                <input type="text" class="edit-surname in-table-input">
+                              </td> 
+                              <td>   
+                                <input type="tel" class="edit-phone-number in-table-input">
+                              </td>
+                              <td> 
+                                <button type="button" class="cancel-button in-table-button">Отменить</button>
+                                <button type="button" class="save-button in-table-button">Сохранить</button>
+                              </td>`);
 
-                const editName = contact.find(".edit-name").val(name);
-                const editSurname = contact.find(".edit-surname").val(surname);
-                const editTelephoneNumber = contact.find(".edit-telephone-number").val(telephoneNumber);
+                contact.find(".current-number").text(currentNumber);
+                const editNameInput = contact.find(".edit-name").val(name);
+                const editSurnameInput = contact.find(".edit-surname").val(surname);
+                const editPhoneNumberInput = contact.find(".edit-phone-number").val(phoneNumber);
 
                 contact.find(".cancel-button").click(function () {
-                    viewContactsList();
+                    initContactInViewMode();
                 });
 
                 contact.find(".save-button").click(function () {
-                    const newName = editName.val().trim();
-                    const newSurname = editSurname.val().trim();
-                    const newTelephoneNumber = editTelephoneNumber.val().trim();
+                    const newName = editNameInput.val().trim();
+                    const newSurname = editSurnameInput.val().trim();
+                    const newPhoneNumber = editPhoneNumberInput.val().trim();
 
-                    editName.removeClass("invalid");
-                    editSurname.removeClass("invalid");
-                    editTelephoneNumber.removeClass("invalid, repeated-tel-number");
-
+                    editNameInput.removeClass("invalid");
+                    editSurnameInput.removeClass("invalid");
+                    editPhoneNumberInput.removeClass("invalid repeated-phone-number");
 
                     if (newName.length === 0) {
-                        editName.addClass("invalid");
+                        editNameInput.addClass("invalid");
                     }
 
                     if (newSurname.length === 0) {
-                        editSurname.addClass("invalid");
+                        editSurnameInput.addClass("invalid");
                     }
 
-                    if (newTelephoneNumber.length === 0) {
-                        editTelephoneNumber.addClass("invalid");
+                    if (newPhoneNumber.length === 0) {
+                        editPhoneNumberInput.addClass("invalid");
                     }
 
-                    $(".telephone-number").each(function () {
-                        if ($(this).text() === newTelephoneNumber) {
-                            editTelephoneNumber.addClass("repeated-tel-number");
+                    $(".phone-number").each(function () {
+                        if ($(this).text() === newPhoneNumber) {
+                            editPhoneNumberInput.addClass("repeated-phone-number");
                         }
+                    });
 
-                    })
-
-                    if (editName.hasClass("invalid") || editSurname.hasClass("invalid") ||
-                        editTelephoneNumber.hasClass("invalid") || editTelephoneNumber.hasClass("repeated-tel-number")) {
+                    if (editNameInput.hasClass("invalid") || editSurnameInput.hasClass("invalid")
+                        || editPhoneNumberInput.hasClass("invalid")
+                        || editPhoneNumberInput.hasClass("repeated-phone-number")) {
                         return;
                     }
 
                     name = newName;
                     surname = newSurname;
-                    telephoneNumber = newTelephoneNumber;
-                    viewContactsList();
+                    phoneNumber = newPhoneNumber;
+                    initContactInViewMode();
                 });
             });
 
             $(".checkbox").click(function () {
                 if ($(".checkbox").is(":checked")) {
-                    $(".delete-all-button").prop("disabled", false);
+                    deleteAllButton.prop("disabled", false);
                 } else {
                     $(".select-all").prop("checked", false);
-                    $(".delete-all-button").prop("disabled", true);
+                    deleteAllButton.prop("disabled", true);
                 }
-            })
+            });
 
-            $(".delete-all-button").click(function () {
-                contact.find(".checkbox:checked").each(function () {
-                    contact.remove();
-                })
-
-                numbered();
-                $(".delete-all-button").prop("disabled", true);
-                $(".select-all").prop("checked", false);
+            deleteAllButton.click(function () {
+                $(".deletion-confirm").dialog({
+                    resizable: false,
+                    height: "auto",
+                    width: 400,
+                    modal: true,
+                    buttons: {
+                        "Удалить": function () {
+                            $(".contact:has(.checkbox:checked)").remove();
+                            $(this).dialog("close");
+                            assignNumbers();
+                            deleteAllButton.prop("disabled", true);
+                            $(".select-all").prop("checked", false);
+                        },
+                        "Отменить": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
             });
 
             $(".select-all").click(function () {
                 if ($(this).is(":checked")) {
                     $(".checkbox").prop("checked", true);
-                    $(".delete-all-button").prop("disabled", false);
+                    deleteAllButton.prop("disabled", false);
                 } else {
                     $(".checkbox").prop("checked", false);
-                    $(".delete-all-button").prop("disabled", true);
+                    deleteAllButton.prop("disabled", true);
                 }
             });
 
             $(".set-filter").click(function () {
-                const searching_string = $(".filter").val().trim().toLowerCase();
+                const searchingString = $(".filter").val().trim().toLowerCase();
                 $(".contact").hide().filter(function () {
-                    return $(this).text().toLowerCase().indexOf(searching_string) !== -1;
-                }).show();
-            })
+                    return $(this).text().toLowerCase().includes(searchingString);
+                }).addClass("contact-to-show").show();
+
+                $(".contact:has(.checkbox:checked)")
+                    .not(".contact-to-show")
+                    .find(".checkbox:checked")
+                    .prop("checked", false);
+
+                $(this).blur();
+            });
 
             $(".reset-filter").click(function () {
-                $(".contact").show();
+                $(".contact").removeClass("contact-to-show").show();
                 $(".filter").val("");
-            })
+                $(this).blur();
+            });
         }
 
-        inputName.val("");
-        inputSurname.val("");
-        inputTelephoneNumber.val("");
-        viewContactsList();
-
+        addButton.blur();
+        nameInput.val("");
+        surnameInput.val("");
+        phoneNumberInput.val("");
+        initContactInViewMode();
     });
 });
