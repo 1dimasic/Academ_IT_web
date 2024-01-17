@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Список задач</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script defer src="node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script defer src="node_modules/vue/dist/vue.global.js"></script>
+    <script defer src="js/script.js"></script>
+    <script defer src="js/validation.js"></script>
+</head>
+<body>
+<div id="app" class="container">
+    <h1 class="text-center">Список задач</h1>
+    <form @submit.prevent="addTodoItem" class="row needs-validation" novalidate>
+        <div class="col-12">
+            <label for="new-task" class="form-label"></label>
+            <input v-model.trim="newTodoItemText" type="text" id="new-task" class="form-control" required>
+            <div class="invalid-feedback text-center">
+                Введите текст задачи
+            </div>
+        </div>
+        <div class="col-12 mt-4">
+            <button class="btn btn-primary float-end">Добавить</button>
+        </div>
+    </form>
+
+    <div>
+        <template v-for="(item, index) in todoList" :key="index">
+            <div v-if="!item.isEdit" class="row mt-3">
+                <div class="col-auto">
+                    {{index + 1}}
+                </div>
+                <div class="text-break col">
+                    {{item.text}}
+                </div>
+                <div class="col-auto">
+                    <button @click="deleteTodoItem(index)"
+                            class="btn btn-sm btn-danger float-end">Удалить
+                    </button>
+                    <button @click="editTodoItem(index)"
+                            class="btn btn-sm btn-warning float-end me-2">Редактировать
+                    </button>
+                </div>
+            </div>
+            <div v-else class="row mt-3">
+                <div class="col-auto">
+                    {{index + 1}}
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" v-model="item.text"
+                           id="edit-todo-item" aria-label="label" :class="{invalid: item.isInvalid}"
+                           @keyup.enter="saveTodoItem(index, item.text)">
+                    <span class="error-message" :class="{invalid: item.isInvalid}">
+                        Введите текст задачи
+                    </span>
+                </div>
+                <div class="col-auto">
+                    <button @click="notSaveTodoItem(index, item.text)"
+                            class="btn btn-sm btn-secondary float-end">Отменить
+                    </button>
+                    <button @click="saveTodoItem(index, item.text)"
+                            class="btn btn-sm btn-success float-end me-2">Сохранить
+                    </button>
+                </div>
+            </div>
+        </template>
+    </div>
+</div>
+</body>
+</html>
