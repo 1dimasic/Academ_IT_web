@@ -5,11 +5,11 @@
     console.log("Descending sort array", testArray);
 
     const itemsCount = 5;
-    const firstSomeItemsArray = getFirstSomeItemsArray(testArray, itemsCount);
-    console.log("First five items array: ", firstSomeItemsArray);
+    const firstItemsArray = getFirstItemsArray(testArray, itemsCount);
+    console.log("First items array: ", firstItemsArray);
 
-    const lastSomeItemsArray = getLastSomeItemsArray(testArray, itemsCount);
-    console.log("Last five items array: ", lastSomeItemsArray);
+    const lastItemsArray = getLastItemsArray(testArray, itemsCount);
+    console.log("Last items array: ", lastItemsArray);
 
     const evenNumbersSum = getEvenNumbersSum(testArray);
     console.log("Array even numbers sum = ", evenNumbersSum);
@@ -23,11 +23,11 @@
         numbersArray.sort((e1, e2) => e2 - e1);
     }
 
-    function getFirstSomeItemsArray(array, itemsCount) {
+    function getFirstItemsArray(array, itemsCount) {
         return array.slice(0, itemsCount);
     }
 
-    function getLastSomeItemsArray(array, itemsCount) {
+    function getLastItemsArray(array, itemsCount) {
         return array.slice(-itemsCount);
     }
 
