@@ -7,11 +7,11 @@ body {
     color: #FEEED5;
 }
 
-.parent {
+.main {
     background-color: #327983;
 }
 
-.child {
+.container {
     background-color: #4E5B6B;
     height: 100vh;
     max-width: 600px;
@@ -21,7 +21,7 @@ body {
     outline: #FFF solid 3px;
 }
 
-.child > h1 {
+.container > h1 {
     font-size: 26px;
     font-weight: 700;
     padding: 10px;

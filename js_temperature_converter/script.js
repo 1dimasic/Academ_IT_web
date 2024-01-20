@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("form");
-    const inputCelsius = document.querySelector(".input_celsius");
+    const celsiusEntryField = document.querySelector(".input_celsius");
     const outputKelvin = document.querySelector(".output_kelvin");
     const outputFahrenheit = document.querySelector(".output_fahrenheit");
     const errorMessage = document.querySelector(".error_message");
@@ -10,15 +10,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
         outputKelvin.textContent = "";
         outputFahrenheit.textContent = "";
-        let celsiusTemperature = inputCelsius.value.trim();
+
+        const celsiusTemperatureString = celsiusEntryField.value.trim();
         errorMessage.classList.remove("invalid");
 
-        if (celsiusTemperature.length === 0) {
+        if (celsiusTemperatureString.length === 0) {
             errorMessage.classList.add("invalid");
             return;
         }
 
-        celsiusTemperature = Number(celsiusTemperature);
+        const celsiusTemperature = Number(celsiusTemperatureString);
 
         if (isNaN(celsiusTemperature)) {
             errorMessage.classList.add("invalid");
@@ -29,9 +30,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const fahrenheitTemperature = celsiusTemperature * 1.8 + 32;
 
         outputKelvin.textContent = "Температура по шкале Кельвина: " +
-            kelvinTemperature.toFixed(2).toString();
+            kelvinTemperature.toFixed(2);
 
         outputFahrenheit.textContent = "Температура по шкале Фаренгейта: " +
-            fahrenheitTemperature.toFixed(2).toString();
+            fahrenheitTemperature.toFixed(2);
     });
 });
