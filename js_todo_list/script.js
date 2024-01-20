@@ -1,79 +1,79 @@
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.querySelector(".form");
-    const newTask = document.querySelector(".new_task");
+    const newTaskInput = document.getElementById("new_task_input");
     const todoList = document.querySelector(".todo_list");
-    const errorMessage = document.querySelector(".error_message");
 
     form.addEventListener("submit", function (e) {
         e.preventDefault();
 
-        let newTaskText = newTask.value.trim();
-        errorMessage.classList.remove("invalid");
-        newTask.classList.remove("invalid");
+        let newTaskText = newTaskInput.value.trim();
+        newTaskInput.classList.remove("invalid");
 
         if (newTaskText.length === 0) {
-            errorMessage.classList.add("invalid");
-            newTask.classList.add("invalid");
+            newTaskInput.classList.add("invalid");
             return;
         }
 
-        const addedTask = document.createElement("li");
-        addedTask.classList.add("todo_item");
+        const addedTodoTask = document.createElement("li");
 
-        function updateTodoList() {
-            addedTask.innerHTML = `<span class="task_text"></span>
+        addedTodoTask.innerHTML = `<span class="task_text"></span>
                 <button type="button" class="button delete_button">Удалить</button>
                 <button type="button" class="button edit_button">Редактировать</button>`;
+        
+        addedTodoTask.classList.add("todo_item");
+        addedTodoTask.querySelector(".task_text").textContent = newTaskText;
+        todoList.append(addedTodoTask);
 
-            addedTask.querySelector(".task_text").textContent = newTaskText;
-
-            if (addedTask.classList.contains("edit_task")) {
-                addedTask.classList.remove("edit_task");
-            } else {
-                todoList.append(addedTask);
-            }
-
-            addedTask.querySelector(".delete_button").addEventListener("click", function () {
-                addedTask.remove();
+        function initTodoListInViewMode() {
+            addedTodoTask.querySelector(".delete_button").addEventListener("click", function () {
+                addedTodoTask.remove();
             });
 
-            addedTask.querySelector(".edit_button").addEventListener("click", function () {
-                addedTask.classList.add("edit_task");
-                addedTask.innerHTML = `<input type="text" class="edit_task_field">                            
+            addedTodoTask.querySelector(".edit_button").addEventListener("click", function () {
+                addedTodoTask.innerHTML = `<input type="text" class="edit_task_field">
                     <button type="button" class="button cancel_button">Отменить</button>
-                    <button type="button" class="button save_button">Сохранить</button>`;
+                    <button type="button" class="button save_button">Сохранить</button>
+                    <div class="error_message">Введите текст задачи</div>`;
 
-                const editTask = addedTask.querySelector(".edit_task_field");
-                editTask.value = newTaskText;
+                const editTaskInput = addedTodoTask.querySelector(".edit_task_field");
+                editTaskInput.value = newTaskText;
 
-                addedTask.querySelector(".cancel_button").addEventListener("click", function () {
-                    updateTodoList();
+                addedTodoTask.querySelector(".cancel_button").addEventListener("click", function () {
+                    addedTodoTask.innerHTML = `<span class="task_text"></span>
+                        <button type="button" class="button delete_button">Удалить</button>
+                        <button type="button" class="button edit_button">Редактировать</button>`;
+
+                    addedTodoTask.querySelector(".task_text").textContent = newTaskText;
+                    initTodoListInViewMode();
                 });
 
-                addedTask.querySelector(".save_button").addEventListener("click", function () {
-                    const editTaskText = editTask.value.trim();
-                    editTask.classList.remove("invalid");
-                    editTask.removeAttribute("placeholder");
+                addedTodoTask.querySelector(".save_button").addEventListener("click", function () {
+                    const editTaskText = editTaskInput.value.trim();
+                    editTaskInput.classList.remove("invalid");
 
                     if (editTaskText.length === 0) {
-                        editTask.classList.add("invalid");
-                        editTask.setAttribute("placeholder", "Введите текст задачи");
+                        editTaskInput.classList.add("invalid");
                         return;
                     }
 
+                    addedTodoTask.innerHTML = `<span class="task_text"></span>
+                        <button type="button" class="button delete_button">Удалить</button>
+                        <button type="button" class="button edit_button">Редактировать</button>`;
+
                     newTaskText = editTaskText;
-                    updateTodoList();
+                    addedTodoTask.querySelector(".task_text").textContent = newTaskText;
+                    initTodoListInViewMode();
                 });
 
-                editTask.addEventListener("keydown", function (e) {
+                editTaskInput.addEventListener("keydown", function (e) {
                     if (e.code === "Enter") {
-                        addedTask.querySelector(".save_button").click();
+                        addedTodoTask.querySelector(".save_button").click();
                     }
                 });
             });
         }
 
-        updateTodoList();
-        newTask.value = "";
+        initTodoListInViewMode();
+        newTaskInput.value = "";
     });
 });
