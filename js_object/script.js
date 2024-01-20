@@ -67,7 +67,7 @@
 
         countries.forEach(function (country) {
             countriesTotalPopulationsObject[country.name] = country.cities
-                .reduce((totalPopulations, city) => totalPopulations + city.population, 0);
+                .reduce((totalPopulation, city) => totalPopulation + city.population, 0);
         });
 
         return countriesTotalPopulationsObject;
@@ -77,5 +77,5 @@
     console.log("Countries array with max cities count: ", maxCitiesCountCountriesArray);
 
     const countriesTotalPopulationsObject = getCountriesTotalPopulationsObject(countries);
-    console.log("Object 'Country': Total populations: ", countriesTotalPopulationsObject);
+    console.log("Object 'Country': Total population: ", countriesTotalPopulationsObject);
 })();
