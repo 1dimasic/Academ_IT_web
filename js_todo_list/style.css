@@ -7,11 +7,11 @@ body {
     font-family: Calibri, sans-serif;
 }
 
-.parent {
+.main {
     background-color: #7F7F81;
 }
 
-.child {
+.container {
     background-color: #C3BBAB;
     min-height: 100vh;
     max-width: 800px;
@@ -22,7 +22,7 @@ body {
     padding: 5px;
 }
 
-.child > h1 {
+.container > h1 {
     font-size: 28px;
     font-weight: 700;
     padding: 10px;
