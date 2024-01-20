@@ -1,76 +1,77 @@
 $(function () {
     const form = $(".form");
-    const newTask = $(".new_task");
+    const newTaskInput = $("#new_task_input");
     const todoList = $(".todo_list");
-    const errorMessage = $(".error_message")
 
     form.submit(function (e) {
         e.preventDefault();
 
-        let newTaskText = newTask.val().trim();
-        newTask.removeClass("invalid");
-        errorMessage.removeClass("invalid");
+        let newTaskText = newTaskInput.val().trim();
+        newTaskInput.removeClass("invalid");
 
         if (newTaskText.length === 0) {
-            newTask.addClass("invalid");
-            errorMessage.addClass("invalid");
+            newTaskInput.addClass("invalid");
             return;
         }
 
-        const addedTask = $("<li>").addClass("todo_item");
+        const addedTodoTask = $("<li>").addClass("todo_item");
 
-        function updateTodoList() {
-            addedTask.html(`<span class="task_text"></span>
+        addedTodoTask.html(`<span class="task_text"></span>
                 <button type="button" class="button delete_button">Удалить</button>
                 <button type="button" class="button edit_button">Редактировать</button>`);
 
-            addedTask.find(".task_text").text(newTaskText);
+        addedTodoTask.find(".task_text").text(newTaskText);
+        todoList.append(addedTodoTask);
 
-            if (addedTask.hasClass("edit_task")) {
-                addedTask.removeClass("edit_task");
-            } else {
-                todoList.append(addedTask);
-            }
-
-            addedTask.find(".delete_button").click(function () {
-                addedTask.remove();
+        function initTodoListInViewMode() {
+            addedTodoTask.find(".delete_button").click(function () {
+                addedTodoTask.remove();
             });
 
-            addedTask.find(".edit_button").click(function () {
-                addedTask.addClass("edit_task");
-                addedTask.html(`<input type="text" class="edit_task_field">                            
+            addedTodoTask.find(".edit_button").click(function () {
+                addedTodoTask.html(`<input type="text" class="edit_task_field">                            
                     <button type="button" class="button cancel_button">Отменить</button>
-                    <button type="button" class="button save_button">Сохранить</button>`);
+                    <button type="button" class="button save_button">Сохранить</button>
+                    <div class="error_message">Введите текст задачи</div>`);
 
-                const editTask = addedTask.find(".edit_task_field").val(newTaskText);
+                const editTaskInput = addedTodoTask.find(".edit_task_field").val(newTaskText);
 
-                addedTask.find(".cancel_button").click(function () {
-                    updateTodoList();
+                addedTodoTask.find(".cancel_button").click(function () {
+                    addedTodoTask.html(`<span class="task_text"></span>
+                        <button type="button" class="button delete_button">Удалить</button>
+                        <button type="button" class="button edit_button">Редактировать</button>`);
+
+                    addedTodoTask.find(".task_text").text(newTaskText);
+                    initTodoListInViewMode();
                 });
 
-                addedTask.find(".save_button").click(function () {
-                    const editTaskText = editTask.val().trim();
-                    editTask.removeClass("invalid");
+                addedTodoTask.find(".save_button").click(function () {
+                    const editTaskText = editTaskInput.val().trim();
+                    editTaskInput.removeClass("invalid");
 
                     if (editTaskText.length === 0) {
-                        editTask.addClass("invalid");
-                        editTask.prop("placeholder", "Введите текст задачи");
+                        editTaskInput.addClass("invalid");
                         return;
                     }
 
+                    addedTodoTask.html(`<span class="task_text"></span>
+                        <button type="button" class="button delete_button">Удалить</button>
+                        <button type="button" class="button edit_button">Редактировать</button>`);
+
                     newTaskText = editTaskText;
-                    updateTodoList();
+                    addedTodoTask.find(".task_text").text(newTaskText);
+                    initTodoListInViewMode();
                 });
 
-                editTask.keypress(function (e) {
+                editTaskInput.keypress(function (e) {
                     if (e.key === "Enter") {
-                        addedTask.find(".save_button").click();
+                        addedTodoTask.find(".save_button").click();
                     }
                 });
             });
         }
 
-        updateTodoList();
-        newTask.val("");
+        initTodoListInViewMode();
+        newTaskInput.val("");
     });
 });
