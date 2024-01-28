@@ -23,7 +23,7 @@ Vue.createApp({
         </div>
         <component-form @add="addContact" :contacts="contacts"></component-form>
         <filter-form :contacts="contacts"></filter-form>
-        <contacts-list :contacts="contacts" @removeContacts="removeContacts"</contacts-list>`
+        <contacts-list :contacts="contacts" @removeContacts="removeContacts"></contacts-list>`
 })
     .component("filterForm", {
         props: {
@@ -124,6 +124,7 @@ Vue.createApp({
                 contactValidationObject.surname.invalid = savedContact.surname.length === 0;
 
                 let isRepeatedPhoneNumber = this.contacts
+                    .filter(contact => !contact.isEditMode)
                     .some(contact => contact.phoneNumber === savedContact.phoneNumber);
 
                 contactValidationObject.phoneNumber.invalid = savedContact.phoneNumber.length === 0
