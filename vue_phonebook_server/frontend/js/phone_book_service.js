@@ -24,7 +24,7 @@ export default class PhoneBookService {
   }
 
   deleteContacts(id) {
-    return executeDelete(this.baseUrl, `${this.baseUrl}/${id}`)
+    return executeDelete(`${this.baseUrl}/${id}`)
   }
 
   addContactToContacts(contact) {

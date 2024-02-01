@@ -45,10 +45,6 @@
 export default {
   name: "componentForm",
 
-  props: {
-    contacts: Array
-  },
-
   data() {
     return {
       nameInputField: "",
