@@ -14,6 +14,10 @@ function executeDelete(url) {
   return axios.delete(url).then(response => response.data);
 }
 
+function executePut(url, data) {
+  return axios.put(url, data).then(response => response.data);
+}
+
 export default class PhoneBookService {
   constructor() {
     this.baseUrl = "/api/contacts";
@@ -23,11 +27,15 @@ export default class PhoneBookService {
     return executeGet(this.baseUrl, {term});
   }
 
-  deleteContacts(id) {
+  deleteContact(id) {
     return executeDelete(`${this.baseUrl}/${id}`)
   }
 
   addContactToContacts(contact) {
     return executePost(this.baseUrl, contact);
+  }
+
+  updateContact(contact) {
+    return executePut(this.baseUrl, contact);
   }
 }

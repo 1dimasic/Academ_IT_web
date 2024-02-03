@@ -3,15 +3,14 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5">Подтвердите удаление</h1>
+          <h1 class="modal-title fs-5">Ошибка валидации</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          Вы действительно хотите удалить контакт (контакты)?
+          <slot name="validationErrorMessage"></slot>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
-          <button @click="remove" class="btn btn-danger">Удалить</button>
+          <button class="btn btn-danger" data-bs-dismiss="modal">OK</button>
         </div>
       </div>
     </div>
@@ -22,7 +21,7 @@
 import {Modal} from "bootstrap";
 
 export default {
-  name: "DeleteModalDialog",
+  name: "ValidationErrorDialog",
 
   data() {
     return {
@@ -42,10 +41,6 @@ export default {
     hide() {
       this.modal.hide();
     },
-
-    remove() {
-      this.$emit("remove");
-    }
   }
 }
 </script>

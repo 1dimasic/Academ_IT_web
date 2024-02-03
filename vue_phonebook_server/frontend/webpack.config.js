@@ -66,6 +66,7 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: "styles.css"
         }),
+        new CleanWebpackPlugin(),
         new VueLoaderPlugin(),
         new webpack.DefinePlugin({
             __VUE_PROD_DEVTOOLS__: JSON.stringify(false)

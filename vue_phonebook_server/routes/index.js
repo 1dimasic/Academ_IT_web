@@ -59,7 +59,7 @@ router.post("/api/contacts/", function (req, res) {
         });
         return;
     }
-        if (!contact.surname) {
+    if (!contact.surname) {
         res.send({
             success: false,
             message: "Поле 'фамилия' обязательно"
@@ -75,7 +75,9 @@ router.post("/api/contacts/", function (req, res) {
         return;
     }
 
-    if (contacts.some(c => c.phoneNumber === contact.phoneNumber)) {
+    const upperCaseAddedPhoneNumber = contact.phoneNumber.toUpperCase();
+
+    if (contacts.some(c => c.phoneNumber.toUpperCase() === upperCaseAddedPhoneNumber)) {
         res.send({
             success: false,
             message: "Номер телефона должен быть уникальным"
@@ -85,6 +87,57 @@ router.post("/api/contacts/", function (req, res) {
 
     contact.id = ++contactId;
     contacts.push(contact);
+});
+
+router.put("/api/contacts/", function (req, res) {
+    const contactToSave = {
+        id: Number(req.body.id),
+        name: req.body.name,
+        surname: req.body.surname,
+        phoneNumber: req.body.phoneNumber
+    }
+
+    if (!contactToSave.name) {
+        res.send({
+            success: false,
+            message: "Поле 'имя' обязательно"
+        });
+        return;
+    }
+    if (!contactToSave.surname) {
+        res.send({
+            success: false,
+            message: "Поле 'фамилия' обязательно"
+        });
+        return;
+    }
+
+    if (!contactToSave.phoneNumber) {
+        res.send({
+            success: false,
+            message: "Поле 'номер телефона' обязательно"
+        });
+        return;
+    }
+
+    const upperCaseSavedPhoneNumber = contactToSave.phoneNumber.toUpperCase();
+
+    if (contacts
+        .filter(c => c.id !== contactToSave.id)
+        .some(c => c.phoneNumber.toUpperCase() === upperCaseSavedPhoneNumber)) {
+        res.send({
+            success: false,
+            message: "Номер телефона должен быть уникальным"
+        });
+        return;
+    }
+
+    const contactToEdit = contacts.find(c => c.id === contactToSave.id);
+
+    contactToEdit.name = contactToSave.name;
+    contactToEdit.surname = contactToSave.surname;
+    contactToEdit.phoneNumber = contactToSave.phoneNumber;
+
 });
 
 module.exports = router;
