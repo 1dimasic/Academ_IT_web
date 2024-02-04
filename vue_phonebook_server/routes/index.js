@@ -1,21 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-let contacts = [
-    {
-        id: 1,
-        name: "bob",
-        surname: "dilan",
-        phoneNumber: "12"
-    },
-    {
-        id: 2,
-        name: "sue",
-        surname: "dilan",
-        phoneNumber: "34"
-    }
-];
-let contactId = 2;
+let contacts = [];
+let contactId = 0;
 
 /* GET home page. */
 router.get("/", function (req, res) {
