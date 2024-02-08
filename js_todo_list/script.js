@@ -6,6 +6,16 @@ document.addEventListener("DOMContentLoaded", function () {
     form.addEventListener("submit", function (e) {
         e.preventDefault();
 
+        function setTodoItem() {
+            addedTodoTask.innerHTML = `<div class="task_text inline"></div>
+                    <div class="inline">
+                        <button type="button" class="button delete_button">Удалить</button>
+                        <button type="button" class="button edit_button">Редактировать</button>
+                    </div>`;
+            addedTodoTask.classList.add("todo_item");
+            addedTodoTask.querySelector(".task_text").textContent = newTaskText;
+        }
+
         let newTaskText = newTaskInput.value.trim();
         newTaskInput.classList.remove("invalid");
 
@@ -15,16 +25,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         const addedTodoTask = document.createElement("li");
-
-        addedTodoTask.innerHTML = `<span class="task_text"></span>
-                <button type="button" class="button delete_button">Удалить</button>
-                <button type="button" class="button edit_button">Редактировать</button>`;
-        
-        addedTodoTask.classList.add("todo_item");
-        addedTodoTask.querySelector(".task_text").textContent = newTaskText;
+        setTodoItem();
         todoList.append(addedTodoTask);
 
-        function initTodoListInViewMode() {
+        function setViewMode() {
             addedTodoTask.querySelector(".delete_button").addEventListener("click", function () {
                 addedTodoTask.remove();
             });
@@ -33,18 +37,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 addedTodoTask.innerHTML = `<input type="text" class="edit_task_field">
                     <button type="button" class="button cancel_button">Отменить</button>
                     <button type="button" class="button save_button">Сохранить</button>
-                    <div class="error_message">Введите текст задачи</div>`;
+                    <span class="error_message">Введите текст задачи</span>`;
 
                 const editTaskInput = addedTodoTask.querySelector(".edit_task_field");
                 editTaskInput.value = newTaskText;
 
                 addedTodoTask.querySelector(".cancel_button").addEventListener("click", function () {
-                    addedTodoTask.innerHTML = `<span class="task_text"></span>
-                        <button type="button" class="button delete_button">Удалить</button>
-                        <button type="button" class="button edit_button">Редактировать</button>`;
-
-                    addedTodoTask.querySelector(".task_text").textContent = newTaskText;
-                    initTodoListInViewMode();
+                    setTodoItem();
+                    setViewMode();
                 });
 
                 addedTodoTask.querySelector(".save_button").addEventListener("click", function () {
@@ -56,13 +56,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         return;
                     }
 
-                    addedTodoTask.innerHTML = `<span class="task_text"></span>
-                        <button type="button" class="button delete_button">Удалить</button>
-                        <button type="button" class="button edit_button">Редактировать</button>`;
-
                     newTaskText = editTaskText;
-                    addedTodoTask.querySelector(".task_text").textContent = newTaskText;
-                    initTodoListInViewMode();
+                    setTodoItem()
+                    setViewMode();
                 });
 
                 editTaskInput.addEventListener("keydown", function (e) {
@@ -73,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
 
-        initTodoListInViewMode();
+        setViewMode();
         newTaskInput.value = "";
     });
 });
