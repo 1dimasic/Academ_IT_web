@@ -6,6 +6,17 @@ $(function () {
     form.submit(function (e) {
         e.preventDefault();
 
+        function setTodoItem() {
+            addedTodoTask.html(`
+                <div class="task_text inline"></div>
+                <div class="inline">
+                    <button type="button" class="button delete_button">Удалить</button>
+                    <button type="button" class="button edit_button">Редактировать</button>              
+                </div>`);
+
+            addedTodoTask.find(".task_text").text(newTaskText);
+        }
+
         let newTaskText = newTaskInput.val().trim();
         newTaskInput.removeClass("invalid");
 
@@ -15,15 +26,10 @@ $(function () {
         }
 
         const addedTodoTask = $("<li>").addClass("todo_item");
-
-        addedTodoTask.html(`<span class="task_text"></span>
-                <button type="button" class="button delete_button">Удалить</button>
-                <button type="button" class="button edit_button">Редактировать</button>`);
-
-        addedTodoTask.find(".task_text").text(newTaskText);
+        setTodoItem();
         todoList.append(addedTodoTask);
 
-        function initTodoListInViewMode() {
+        function setViewMode() {
             addedTodoTask.find(".delete_button").click(function () {
                 addedTodoTask.remove();
             });
@@ -37,12 +43,8 @@ $(function () {
                 const editTaskInput = addedTodoTask.find(".edit_task_field").val(newTaskText);
 
                 addedTodoTask.find(".cancel_button").click(function () {
-                    addedTodoTask.html(`<span class="task_text"></span>
-                        <button type="button" class="button delete_button">Удалить</button>
-                        <button type="button" class="button edit_button">Редактировать</button>`);
-
-                    addedTodoTask.find(".task_text").text(newTaskText);
-                    initTodoListInViewMode();
+                    setTodoItem();
+                    setViewMode();
                 });
 
                 addedTodoTask.find(".save_button").click(function () {
@@ -54,13 +56,9 @@ $(function () {
                         return;
                     }
 
-                    addedTodoTask.html(`<span class="task_text"></span>
-                        <button type="button" class="button delete_button">Удалить</button>
-                        <button type="button" class="button edit_button">Редактировать</button>`);
-
                     newTaskText = editTaskText;
-                    addedTodoTask.find(".task_text").text(newTaskText);
-                    initTodoListInViewMode();
+                    setTodoItem();
+                    setViewMode();
                 });
 
                 editTaskInput.keypress(function (e) {
@@ -71,7 +69,7 @@ $(function () {
             });
         }
 
-        initTodoListInViewMode();
+        setViewMode();
         newTaskInput.val("");
     });
 });
