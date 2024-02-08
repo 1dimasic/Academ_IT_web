@@ -12,7 +12,7 @@
         {name: "John", age: 21}
     ];
 
-    const averageAge = _.sumBy(people, "age") / people.length;
+    const averageAge = _.meanBy(people, "age");
     console.log("People average age = ", averageAge);
 
     const peopleListFromTwentyToThirtyAged = _.chain(people)
@@ -24,10 +24,10 @@
 
     const uniquePeopleNamesListFromTwentyToThirtyAged = _.chain(people)
         .filter(p => p.age >= 20 && p.age <= 30)
-        .sortBy("age")
-        .reverse()
         .map(p => p.name)
         .uniq()
+        .sort()
+        .reverse()
         .value();
 
     console.log("Unique people names list from 20 to 30 aged: ", uniquePeopleNamesListFromTwentyToThirtyAged);
