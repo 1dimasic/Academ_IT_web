@@ -27,7 +27,7 @@ body {
     padding: 10px;
 }
 
-.input_celsius {
+.celsius-text-field {
     max-width: 400px;
     width: 100%;
     padding: 4px;
@@ -35,11 +35,11 @@ body {
     margin-top: 5px;
 }
 
-.input_celsius::placeholder {
+.celsius-text-field::placeholder {
     text-align: center;
 }
 
-.input_celsius:focus {
+.celsius-text-field:focus {
     outline: none;
 }
 

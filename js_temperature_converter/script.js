@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("form");
-    const celsiusEntryField = document.querySelector(".input_celsius");
+    const celsiusTextField = document.querySelector(".celsius-text-field");
     const outputKelvin = document.querySelector(".output_kelvin");
     const outputFahrenheit = document.querySelector(".output_fahrenheit");
     const errorMessage = document.querySelector(".error_message");
@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
         outputKelvin.textContent = "";
         outputFahrenheit.textContent = "";
 
-        const celsiusTemperatureString = celsiusEntryField.value.trim();
+        const celsiusTemperatureString = celsiusTextField.value.trim();
         errorMessage.classList.remove("invalid");
 
         if (celsiusTemperatureString.length === 0) {
