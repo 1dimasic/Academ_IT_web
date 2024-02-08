@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from 'vue-router'
+import {createRouter, createWebHistory} from "vue-router"
 import FavoriteFilms from "@/components/FavoriteFilms";
 import Index from "@/components";
 
@@ -17,6 +17,6 @@ const router = createRouter({
       component: FavoriteFilms
     }
   ]
-})
+});
 
 export default router

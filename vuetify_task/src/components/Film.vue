@@ -28,7 +28,8 @@
 
 <script>
 import FilmDetails from "@/components/FilmDetails.vue";
-import {store} from "@/main";
+import {useFavoritesFilmsStore} from "@/store/app";
+import FavoriteFilms from "@/components/FavoriteFilms.vue";
 
 export default {
     name: "Film",
@@ -37,12 +38,13 @@ export default {
         return {
             currentFilm: this.film,
             isFavoriteFilm: false,
-            store: store
+            store: useFavoritesFilmsStore()
         }
     },
 
     components: {
-        FilmDetails
+        FilmDetails,
+        FavoriteFilms
     },
 
     props: {
@@ -70,10 +72,14 @@ export default {
         },
 
         addFilmToFavorite() {
+            // успешное добавление в store
             if (!this.isFavoriteFilm) {
                 this.store.add(this.currentFilm);
-                console.log(this.store.favoritesFilmsItems);
+                //console.log(this.store.items);
             } else {
+                // успешное удаление из store
+                this.store.remove(this.currentFilm);
+                //console.log(this.store.items);
             }
             this.isFavoriteFilm = !this.isFavoriteFilm;
         }

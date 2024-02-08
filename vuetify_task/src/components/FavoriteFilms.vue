@@ -3,14 +3,13 @@
         <v-toolbar-title class="text-h5 v-col-4">Избранное</v-toolbar-title>
     </v-app-bar>
     <v-container>
-        <button @click="abc">Кнопка</button>
         <v-row align="center" justify="center">
             <v-col xl="2"
                    lg="3"
                    md="4"
                    sm="6"
                    xs="12"
-                   v-for="film in store.favoritesFilmsItems"
+                   v-for="film in store.items"
                    :key="film.id">
                 <v-card
                     class="mx-auto"
@@ -29,7 +28,7 @@
                         <v-btn size="medium" color="green-lighten-1" icon="mdi-movie"
                                @click=""></v-btn>
                         <v-spacer></v-spacer>
-                        <v-btn size="medium"  icon="mdi-heart"
+                        <v-btn size="medium" icon="mdi-heart"
                                @click=""></v-btn>
                     </v-card-actions>
                 </v-card>
@@ -40,22 +39,15 @@
 </template>
 
 <script>
-import {store} from "@/main";
+import {useFavoritesFilmsStore} from "@/store/app";
 
 export default {
     name: "FavoriteFilms",
 
     data() {
         return {
-            store: store
-        }
+            store: useFavoritesFilmsStore()
+        };
     },
-
-    methods: {
-        abc() {
-            console.log(this.store.favoritesFilmsItems);
-        }
-    }
-
 }
 </script>

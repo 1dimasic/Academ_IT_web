@@ -12,7 +12,7 @@
     </v-app-bar>
     <v-infinite-scroll :onLoad="getFilms">
         <v-container>
-            <v-row align="center" justify="cent er">
+            <v-row align="center" justify="center">
                 <v-col xl="2"
                        lg="3"
                        md="4"
@@ -20,7 +20,7 @@
                        xs="12"
                        v-for="film in filmsList"
                        :key="film.id">
-                    <film :film="film" :genres="genres"></film>
+                    <film :film="film" :genres="genresList"></film>
                 </v-col>
             </v-row>
         </v-container>
@@ -43,7 +43,7 @@ export default {
         return {
             filmsList: [],
             page: 0,
-            genres: [],
+            genresList: [],
             term: ""
         }
     },
@@ -83,7 +83,7 @@ export default {
                     }
                 }).then(response => {
                     this.filmsList = this.filmsList.concat(response.data.results);
-                }).catch(() => alert("Не удалось загрузить фильмы ПОИСК"));
+                }).catch(() => alert("Не удалось загрузить фильмы"));
             }
         },
 
@@ -94,7 +94,7 @@ export default {
                     language: "ru"
                 }
             }).then(response => {
-                this.genres = response.data.genres;
+                this.genresList = response.data.genres;
             }).catch(() => alert("Не удалось загрузить наименования жанров"));
         },
     },
@@ -105,5 +105,3 @@ export default {
     }
 }
 </script>
-<style scoped>
-</style>
