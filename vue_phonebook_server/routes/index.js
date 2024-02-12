@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 let contacts = [];
-let contactId = 0;
+let contactId = 1;
 
 /* GET home page. */
 router.get("/", function (req, res) {
@@ -12,13 +12,13 @@ router.get("/", function (req, res) {
 router.get("/api/contacts", function (req, res) {
     const term = (req.query.term || "").toUpperCase();
 
-    const contactToShow = term.length === 0
+    const contactsToShow = term.length === 0
         ? contacts
         : contacts.filter(contact => contact.name.toUpperCase().includes(term)
             || contact.surname.toUpperCase().includes(term)
-            || contact.phoneNumber.toUpperCase().includes(term))
+            || contact.phoneNumber.toUpperCase().includes(term));
 
-    res.send(contactToShow);
+    res.send(contactsToShow);
 });
 
 router.delete("/api/contacts/:id", function (req, res) {
@@ -29,15 +29,15 @@ router.delete("/api/contacts/:id", function (req, res) {
     res.send({
         success: true,
         message: null
-    })
+    });
 });
 
-router.post("/api/contacts/", function (req, res) {
+router.post("/api/contacts", function (req, res) {
     const contact = {
         name: req.body.name,
         surname: req.body.name,
         phoneNumber: req.body.phoneNumber
-    }
+    };
 
     if (!contact.name) {
         res.send({
@@ -46,6 +46,7 @@ router.post("/api/contacts/", function (req, res) {
         });
         return;
     }
+
     if (!contact.surname) {
         res.send({
             success: false,
@@ -62,9 +63,9 @@ router.post("/api/contacts/", function (req, res) {
         return;
     }
 
-    const upperCaseAddedPhoneNumber = contact.phoneNumber.toUpperCase();
+    const upperCasePhoneNumber = contact.phoneNumber.toUpperCase();
 
-    if (contacts.some(c => c.phoneNumber.toUpperCase() === upperCaseAddedPhoneNumber)) {
+    if (contacts.some(c => c.phoneNumber.toUpperCase() === upperCasePhoneNumber)) {
         res.send({
             success: false,
             message: "Номер телефона должен быть уникальным"
@@ -72,17 +73,23 @@ router.post("/api/contacts/", function (req, res) {
         return;
     }
 
-    contact.id = ++contactId;
+    contact.id = contactId;
     contacts.push(contact);
+    contactId++;
+
+    res.send({
+        success: true,
+        message: "Контакт успешно добавлен"
+    });
 });
 
-router.put("/api/contacts/", function (req, res) {
+router.put("/api/contacts", function (req, res) {
     const contactToSave = {
         id: Number(req.body.id),
         name: req.body.name,
         surname: req.body.surname,
         phoneNumber: req.body.phoneNumber
-    }
+    };
 
     if (!contactToSave.name) {
         res.send({
@@ -107,11 +114,9 @@ router.put("/api/contacts/", function (req, res) {
         return;
     }
 
-    const upperCaseSavedPhoneNumber = contactToSave.phoneNumber.toUpperCase();
+    const upperCasePhoneNumber = contactToSave.phoneNumber.toUpperCase();
 
-    if (contacts
-        .filter(c => c.id !== contactToSave.id)
-        .some(c => c.phoneNumber.toUpperCase() === upperCaseSavedPhoneNumber)) {
+    if (contacts.some(c => c.phoneNumber.toUpperCase() === upperCasePhoneNumber && c.id !== contactToSave.id)) {
         res.send({
             success: false,
             message: "Номер телефона должен быть уникальным"
@@ -125,6 +130,10 @@ router.put("/api/contacts/", function (req, res) {
     contactToEdit.surname = contactToSave.surname;
     contactToEdit.phoneNumber = contactToSave.phoneNumber;
 
+    res.send({
+        success: true,
+        message: "Контакт успешно обновлен"
+    });
 });
 
 module.exports = router;
