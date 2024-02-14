@@ -11,6 +11,11 @@
   "license": "ISC",
   "dependencies": {
     "bootstrap": "^5.3.2",
+    "lodash": "^4.17.21",
     "vue": "^3.4.15"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "eslint-plugin-vue": "^9.21.1"
   }
 }
