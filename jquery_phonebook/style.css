@@ -40,7 +40,7 @@ body {
     outline: none;
 }
 
-.container div {
+.container .inline {
     display: inline-block;
     width: 33%;
     min-width: 220px;
@@ -49,7 +49,7 @@ body {
     position: relative;
 }
 
-.container label {
+.container .label {
     position: absolute;
     top: -10px;
     left: 40px;
@@ -58,16 +58,15 @@ body {
 }
 
 .error-message {
-    display: none;
+    visibility: hidden;
 }
 
 .invalid + .error-message,
 .repeated-phone-number + .error-message {
     font-size: 14px;
     color: #F00;
-    display: block;
+    visibility: visible;
     font-weight: bold;
-    margin-top: 2px;
 }
 
 .invalid,
@@ -106,10 +105,11 @@ body {
     margin-right: 20px;
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 500px) {
     .add-button {
         margin-right: 47px;
     }
+
     .delete-all-button {
         margin-right: 47px;
     }
@@ -140,13 +140,11 @@ body {
     font-size: 16px;
 }
 
-.contact-list td:not(:last-child) {
-    border-right: solid 1px #B4B4B4;
-}
-
+.contact-list td:not(:last-child),
 .table th:not(:last-child) {
     border-right: solid 1px #B4B4B4;
 }
+
 
 .table-input {
     width: 95%;
