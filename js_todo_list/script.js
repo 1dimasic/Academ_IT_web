@@ -6,16 +6,6 @@ document.addEventListener("DOMContentLoaded", function () {
     form.addEventListener("submit", function (e) {
         e.preventDefault();
 
-        function setTodoItem() {
-            addedTodoTask.innerHTML = `<div class="task_text inline"></div>
-                    <div class="inline">
-                        <button type="button" class="button delete_button">Удалить</button>
-                        <button type="button" class="button edit_button">Редактировать</button>
-                    </div>`;
-            addedTodoTask.classList.add("todo_item");
-            addedTodoTask.querySelector(".task_text").textContent = newTaskText;
-        }
-
         let newTaskText = newTaskInput.value.trim();
         newTaskInput.classList.remove("invalid");
 
@@ -25,16 +15,26 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         const addedTodoTask = document.createElement("li");
-        setTodoItem();
         todoList.append(addedTodoTask);
 
         function setViewMode() {
+            addedTodoTask.innerHTML = `
+                    <div class="task_text inline"></div>
+                    <div class="inline">
+                        <button type="button" class="button delete_button">Удалить</button>
+                        <button type="button" class="button edit_button">Редактировать</button>
+                    </div>`;
+
+            addedTodoTask.classList.add("todo_item");
+            addedTodoTask.querySelector(".task_text").textContent = newTaskText;
+
             addedTodoTask.querySelector(".delete_button").addEventListener("click", function () {
                 addedTodoTask.remove();
             });
 
             addedTodoTask.querySelector(".edit_button").addEventListener("click", function () {
-                addedTodoTask.innerHTML = `<input type="text" class="edit_task_field">
+                addedTodoTask.innerHTML = `
+                    <input type="text" class="edit_task_field">
                     <button type="button" class="button cancel_button">Отменить</button>
                     <button type="button" class="button save_button">Сохранить</button>
                     <span class="error_message">Введите текст задачи</span>`;
@@ -43,7 +43,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 editTaskInput.value = newTaskText;
 
                 addedTodoTask.querySelector(".cancel_button").addEventListener("click", function () {
-                    setTodoItem();
                     setViewMode();
                 });
 
@@ -57,7 +56,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
                     newTaskText = editTaskText;
-                    setTodoItem()
                     setViewMode();
                 });
 
