@@ -12,8 +12,12 @@ export const useFavoritesFilmsStore = defineStore("favoritesFilms", {
             this.items.push(film);
         },
 
-        remove(film) {
-            this.items = this.items.filter(item => item.id !== film.id);
+        remove(filmId) {
+            this.items = this.items.filter(item => item.id !== filmId);
+        },
+
+        contains(filmId) {
+            return Boolean(this.items.find(item => item.id === filmId));
         }
     }
 });

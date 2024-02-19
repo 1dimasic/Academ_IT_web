@@ -4,13 +4,12 @@
     </v-app-bar>
     <v-container>
         <v-row align="center" justify="center">
-            <v-col xl="2"
+            <v-col v-for="film in store.items" :key="film.id"
+                   xl="2"
                    lg="3"
                    md="4"
                    sm="6"
-                   xs="12"
-                   v-for="film in store.items"
-                   :key="film.id">
+                   xs="12">
                 <v-card
                     class="mx-auto"
                     max-width="350px">
@@ -21,7 +20,6 @@
                                 <v-img :src="`https://image.tmdb.org/t/p/w500${film.poster_path}`"
                                        width="230px"></v-img>
                             </div>
-                            <div class="font-weight-bold">{{ }}</div>
                         </div>
                     </v-card-item>
                     <v-card-actions>
@@ -35,11 +33,10 @@
             </v-col>
         </v-row>
     </v-container>
-
 </template>
 
 <script>
-import {useFavoritesFilmsStore} from "@/store/app";
+import {useFavoritesFilmsStore} from "@/store/FavoritesFilmsStore";
 
 export default {
     name: "FavoriteFilms",
@@ -48,6 +45,6 @@ export default {
         return {
             store: useFavoritesFilmsStore()
         };
-    },
+    }
 }
 </script>

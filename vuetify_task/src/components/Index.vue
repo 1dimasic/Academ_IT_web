@@ -6,21 +6,21 @@
                       v-model.trim="term"
                       placeholder="Найти"
                       clearable></v-text-field>
-        <a :href="'/favorites'" class="v-col-2">
+        <router-link to="/favorites" class="v-col-2">
             <v-btn class="float-end" icon="mdi-movie-open-star"></v-btn>
-        </a>
+        </router-link>
     </v-app-bar>
-    <v-infinite-scroll :onLoad="getFilms">
+    <v-infinite-scroll :onLoad="loadFilms">
         <v-container>
             <v-row align="center" justify="center">
-                <v-col xl="2"
+                <v-col v-for="film in films"
+                       :key="film.id"
+                       xl="2"
                        lg="3"
                        md="4"
                        sm="6"
-                       xs="12"
-                       v-for="film in filmsList"
-                       :key="film.id">
-                    <film :film="film" :genres="genresList"></film>
+                       xs="12">
+                    <film :film="film" :genres="genres"></film>
                 </v-col>
             </v-row>
         </v-container>
@@ -28,80 +28,67 @@
 </template>
 
 <script>
-import axios from "axios";
-import Film from "@/components/Film.vue";
+import CinemaService from "@/components/CinemaService";
 import _ from "lodash";
+import Film from "@/components/Film.vue";
+import {useFavoritesFilmsStore} from "@/store/FavoritesFilmsStore";
 
 export default {
     name: "Index",
 
-    components: {
-        Film,
-    },
-
     data() {
         return {
-            filmsList: [],
+            films: [],
+            genres: [],
+            term: "",
             page: 0,
-            genresList: [],
-            term: ""
-        }
+            store: useFavoritesFilmsStore(),
+            service: new CinemaService()
+        };
+    },
+
+    components: {
+        Film
+    },
+
+    mounted() {
+        this.loadGenres();
     },
 
     watch: {
-        term(newTerm) {
-            this.loadFilms(newTerm);
+        term(newValue) {
+            this.setFilter(newValue);
         }
     },
 
     methods: {
-        loadFilms: _.debounce(function () {
-            this.getFilms();
-            this.filmsList = [];
-            this.page = 0;
-        }, 500),
+        async loadFilms({done}) {
+            this.page += 1;
 
-
-        getFilms() {
             if (!this.term) {
-                axios.get("https://api.themoviedb.org/3/movie/popular", {
-                    params: {
-                        api_key: "e54fe9c197f033da85a056da00280567",
-                        language: "ru",
-                        page: ++this.page
-                    }
-                }).then(response => {
-                    this.filmsList = this.filmsList.concat(response.data.results);
+                this.service.loadPopularsFilms(this.page).then(response => {
+                    this.films = this.films.concat(response.data.results);
+                    done("ok");
                 }).catch(() => alert("Не удалось загрузить фильмы"));
             } else {
-                axios.get(`https://api.themoviedb.org/3/search/movie?query=${this.term}`, {
-                    params: {
-                        api_key: "e54fe9c197f033da85a056da00280567",
-                        language: "ru",
-                        include_adult: "false",
-                        page: ++this.page
-                    }
-                }).then(response => {
-                    this.filmsList = this.filmsList.concat(response.data.results);
+                this.service.loadSearchingFilms(this.term, this.page).then(response => {
+                    this.films = this.films.concat(response.data.results);
+                    done("ok");
                 }).catch(() => alert("Не удалось загрузить фильмы"));
             }
         },
 
-        getGenres() {
-            axios.get("https://api.themoviedb.org/3/genre/movie/list", {
-                params: {
-                    api_key: "e54fe9c197f033da85a056da00280567",
-                    language: "ru"
-                }
-            }).then(response => {
-                this.genresList = response.data.genres;
-            }).catch(() => alert("Не удалось загрузить наименования жанров"));
-        },
-    },
+        // TODO
+        setFilter: _.debounce(function () {
+            this.films = [];
+            this.page = 0;
+        }, 500),
 
-    mounted() {
-        this.getFilms();
-        this.getGenres();
+        loadGenres() {
+            this.service.loadGenres().then(response => {
+                this.genres = response.data.genres;
+            }).catch(() => alert("Не удалось загрузить наименования жанров"));
+        }
     }
 }
 </script>

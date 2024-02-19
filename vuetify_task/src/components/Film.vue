@@ -1,50 +1,41 @@
 <template>
     <v-card
         class="mx-auto"
-        max-width="350px">
-        <v-card-item>
-            <div>
-                <div class="mb-1 text-lg-h6 font-weight-bold">{{ currentFilm.title }}</div>
+        max-width="350px"
+        hover>
+        <router-link :to="`/film/${film.id}`" style="text-decoration: none;">
+            <v-card-item>
                 <div>
-                    <v-img :src="`https://image.tmdb.org/t/p/w500${currentFilm.poster_path}`"
-                           width="230px"></v-img>
+                    <div class="mb-1 text-h7 font-weight-bold">{{ film.title }}</div>
+                    <div>
+                        <v-img :src="`https://image.tmdb.org/t/p/w500${film.poster_path}`"
+                               width="230px"></v-img>
+                    </div>
+                    <div class="font-weight-bold">{{ getGenresNames }}</div>
                 </div>
-                <div class="font-weight-bold">{{ getGenresNames() }}</div>
-            </div>
-        </v-card-item>
+            </v-card-item>
+        </router-link>
         <v-card-actions>
             <v-btn size="medium" color="green-lighten-1" icon="mdi-movie"
                    @click="showFilmDetails"></v-btn>
             <v-spacer></v-spacer>
-            <v-btn size="medium" :color="isFavoriteFilmButtonColor" icon="mdi-heart"
-                   @click="addFilmToFavorite"></v-btn>
+            <v-btn size="medium" :color="favoriteFilmButtonColor" icon="mdi-heart"
+                   @click="setFavoriteMode"></v-btn>
         </v-card-actions>
     </v-card>
-    <film-details ref="filmDetailsModalDialog"
-                  :isFavoriteFilm="isFavoriteFilm"
-                  :film="currentFilm"
-                  @add="addFilmToFavorite"></film-details>
 </template>
 
 <script>
-import FilmDetails from "@/components/FilmDetails.vue";
-import {useFavoritesFilmsStore} from "@/store/app";
-import FavoriteFilms from "@/components/FavoriteFilms.vue";
+import {useFavoritesFilmsStore} from "@/store/FavoritesFilmsStore"
 
 export default {
     name: "Film",
 
     data() {
         return {
-            currentFilm: this.film,
-            isFavoriteFilm: false,
-            store: useFavoritesFilmsStore()
-        }
-    },
-
-    components: {
-        FilmDetails,
-        FavoriteFilms
+            store: useFavoritesFilmsStore(),
+            favoriteFilmButtonColor: null
+        };
     },
 
     props: {
@@ -53,35 +44,28 @@ export default {
     },
 
     computed: {
-        isFavoriteFilmButtonColor() {
-            return this.isFavoriteFilm ? "red" : "grey"
+        getGenresNames() {
+            return this.genres
+                .filter(g => this.film.genre_ids.includes(g.id))
+                .map(g => g.name)
+                .slice(0, 2)
+                .join(", ");
         }
     },
 
     methods: {
         showFilmDetails() {
-            this.$refs.filmDetailsModalDialog.show();
+            this.$router.push({path: `/film/${this.film.id}`})
         },
 
-        getGenresNames() {
-            return this.genres
-                .filter(g => this.currentFilm.genre_ids.includes(g.id))
-                .map(g => g.name)
-                .slice(0, 2)
-                .join(", ");
-        },
-
-        addFilmToFavorite() {
-            // успешное добавление в store
-            if (!this.isFavoriteFilm) {
-                this.store.add(this.currentFilm);
-                //console.log(this.store.items);
+        setFavoriteMode() {
+            if (!this.store.contains(this.film.id)) {
+                this.store.add(this.film)
+                this.favoriteFilmButtonColor = "red";
             } else {
-                // успешное удаление из store
-                this.store.remove(this.currentFilm);
-                //console.log(this.store.items);
+                this.store.remove(this.film.id);
+                this.favoriteFilmButtonColor = "grey";
             }
-            this.isFavoriteFilm = !this.isFavoriteFilm;
         }
     }
 }
