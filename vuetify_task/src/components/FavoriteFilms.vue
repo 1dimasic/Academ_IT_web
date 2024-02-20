@@ -18,16 +18,26 @@
                             <div class="mb-1 text-lg-h6 font-weight-bold">{{ film.title }}</div>
                             <div>
                                 <v-img :src="`https://image.tmdb.org/t/p/w500${film.poster_path}`"
-                                       width="230px"></v-img>
+                                       cover></v-img>
                             </div>
                         </div>
                     </v-card-item>
                     <v-card-actions>
-                        <v-btn size="medium" color="green-lighten-1" icon="mdi-movie"
-                               @click=""></v-btn>
+                        <v-btn size="medium"
+                               color="green-lighten-1"
+                               prepend-icon="mdi-movie"
+                               class="text-h6"
+                               @click="showFilmDetails(film.id)">
+                            Подробнее
+                        </v-btn>
                         <v-spacer></v-spacer>
-                        <v-btn size="medium" icon="mdi-heart"
-                               @click=""></v-btn>
+                        <v-btn size="medium"
+                               color="red"
+                               append-icon="mdi-heart"
+                               class="text-h6"
+                               @click="removeFilmFromFavorites(film.id)">
+                            Удалить
+                        </v-btn>
                     </v-card-actions>
                 </v-card>
             </v-col>
@@ -45,6 +55,16 @@ export default {
         return {
             store: useFavoritesFilmsStore()
         };
+    },
+
+    methods: {
+        removeFilmFromFavorites(filmId) {
+            this.store.remove(filmId);
+        },
+
+        showFilmDetails(filmId) {
+            this.$router.push({path: `/film/${filmId}`})
+        }
     }
 }
 </script>

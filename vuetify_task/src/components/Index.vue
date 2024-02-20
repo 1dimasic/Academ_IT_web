@@ -1,14 +1,17 @@
 <template>
     <v-app-bar color="deep-purple-lighten-3">
-        <v-toolbar-title class="text-h5 v-col-4">Кинотеатр</v-toolbar-title>
-        <v-text-field class="v-col-4 mt-5"
+        <v-toolbar-title class="text-h4 v-col-2">Кинотеатр</v-toolbar-title>
+        <router-link to="/favorites" class="v-col-2">
+            <v-btn prepend-icon="mdi-movie-open-star" color="white" class="text-h5">
+                Избранное
+            </v-btn>
+        </router-link>
+        <v-text-field class="v-col-2 mt-5"
                       variant="outlined"
                       v-model.trim="term"
                       placeholder="Найти"
-                      clearable></v-text-field>
-        <router-link to="/favorites" class="v-col-2">
-            <v-btn class="float-end" icon="mdi-movie-open-star"></v-btn>
-        </router-link>
+                      clearable>
+        </v-text-field>
     </v-app-bar>
     <v-infinite-scroll :onLoad="loadFilms">
         <v-container>
@@ -25,6 +28,20 @@
             </v-row>
         </v-container>
     </v-infinite-scroll>
+    <v-dialog v-model="errorDialog" transition="dialog-bottom-transition" width="auto">
+        <v-card>
+            <v-toolbar color="deep-purple-lighten-1" title="Ошибка загрузки"></v-toolbar>
+            <v-card-text class="text-h5 pa-8">{{ errorDialogMessage }}</v-card-text>
+            <v-card-actions class="justify-end">
+                <v-btn
+                    variant="tonal"
+                    class="text-h5"
+                    @click="errorDialog=false">
+                    Закрыть
+                </v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script>
@@ -43,7 +60,9 @@ export default {
             term: "",
             page: 0,
             store: useFavoritesFilmsStore(),
-            service: new CinemaService()
+            service: new CinemaService(),
+            errorDialog: false,
+            errorDialogMessage: ""
         };
     },
 
@@ -69,12 +88,18 @@ export default {
                 this.service.loadPopularsFilms(this.page).then(response => {
                     this.films = this.films.concat(response.data.results);
                     done("ok");
-                }).catch(() => alert("Не удалось загрузить фильмы"));
+                }).catch(() => {
+                    this.errorDialog = true;
+                    this.errorDialogMessage = "Не удалось загрузить фильмы";
+                });
             } else {
                 this.service.loadSearchingFilms(this.term, this.page).then(response => {
                     this.films = this.films.concat(response.data.results);
                     done("ok");
-                }).catch(() => alert("Не удалось загрузить фильмы"));
+                }).catch(() => {
+                    this.errorDialog = true;
+                    this.errorDialogMessage = "Не удалось загрузить фильмы";
+                });
             }
         },
 
@@ -87,7 +112,10 @@ export default {
         loadGenres() {
             this.service.loadGenres().then(response => {
                 this.genres = response.data.genres;
-            }).catch(() => alert("Не удалось загрузить наименования жанров"));
+            }).catch(() => {
+                this.errorDialog = true;
+                this.errorDialogMessage = "Не удалось загрузить наименования жанров";
+            });
         }
     }
 }

@@ -1,6 +1,9 @@
 <template>
     <v-app-bar color="deep-purple-lighten-3">
         <v-toolbar-title class="text-h5 v-col-4">{{ filmDetails.title }}</v-toolbar-title>
+        <router-link to="/favorites" class="v-col-2">
+            <v-btn class="float-end" icon="mdi-movie-open-star"></v-btn>
+        </router-link>
     </v-app-bar>
     <v-container>
         <v-row no-gutters>
@@ -46,6 +49,20 @@
             </v-col>
         </v-row>
     </v-container>
+    <v-dialog v-model="errorDialog" transition="dialog-bottom-transition" width="auto">
+        <v-card>
+            <v-toolbar color="deep-purple-lighten-1" title="Ошибка загрузки"></v-toolbar>
+            <v-card-text class="text-h5 pa-8">{{ errorDialogMessage }}</v-card-text>
+            <v-card-actions class="justify-end">
+                <v-btn
+                    variant="tonal"
+                    class="text-h5"
+                    @click="errorDialog = false">
+                    Закрыть
+                </v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script>
@@ -61,8 +78,8 @@ export default {
             service: new CinemaService(),
             id: this.$route.params.id,
             store: useFavoritesFilmsStore(),
-            favoriteFilmButtonColor: "deep-purple-lighten-1",
-            favoriteFilmButtonText: "Добавить"
+            errorDialog: false,
+            errorDialogMessage: ""
         };
     },
 
@@ -74,6 +91,14 @@ export default {
     computed: {
         hasRecommendation() {
             return this.recommendedFilms ? this.recommendedFilms.length !== 0 : false;
+        },
+
+        favoriteFilmButtonColor() {
+            return this.store.contains(this.filmDetails.id) ? "teal" : "deep-purple-lighten-1";
+        },
+
+        favoriteFilmButtonText() {
+            return this.store.contains(this.filmDetails.id) ? "Удалить" : "Добавить";
         }
     },
 
@@ -82,24 +107,26 @@ export default {
             this.service.loadFilmDetails(this.id).then(response => {
                 this.filmDetails = response.data;
                 console.log(response.data)
-            }).catch(() => alert("Не удалось загрузить детали"));
+            }).catch(() => {
+                this.errorDialog = true;
+                this.errorDialogMessage = "Не удалось загрузить подробности фильма";
+            });
         },
 
         loadRecommendedFilms() {
             this.service.loadRecommendedFilms(this.id).then(response => {
                 this.recommendedFilms = response.data.results;
-            }).catch(() => alert("Не удалось загрузить рекомендации"));
+            }).catch(() => {
+                this.errorDialog = true;
+                this.errorDialogMessage = "Не удалось загрузить рекомендации";
+            });
         },
 
         setFavoriteMode() {
-            if (!this.store.contains(this.id)) {
-                this.store.add(this.film)
-                this.favoriteFilmButtonColor = "teal";
-                this.favoriteFilmButtonText = "Удалить";
+            if (!this.store.contains(this.filmDetails.id)) {
+                this.store.add(this.filmDetails)
             } else {
-                this.store.remove(this.id);
-                this.favoriteFilmButtonColor = "deep-purple-lighten-1";
-                this.favoriteFilmButtonText = "Добавить";
+                this.store.remove(this.filmDetails.id);
             }
         }
     }
