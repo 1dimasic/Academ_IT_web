@@ -1,19 +1,19 @@
 <template>
     <v-app-bar color="deep-purple-lighten-3">
-        <v-toolbar-title class="text-h4 v-col-2">Кинотеатр</v-toolbar-title>
-        <router-link to="/favorites" class="v-col-2">
-            <v-btn prepend-icon="mdi-movie-open-star" color="white" class="text-h5">
+        <v-toolbar-title class="text-xl-h4 text-md-h5 v-col-4">Кинотеатр</v-toolbar-title>
+        <router-link to="/favorites">
+            <v-btn prepend-icon="mdi-movie-open-star" color="white" class="text-xl-h4 text-md-h6">
                 Избранное
             </v-btn>
         </router-link>
-        <v-text-field class="v-col-2 mt-5"
+        <v-text-field class="v-col-3 mt-5"
                       variant="outlined"
                       v-model.trim="term"
                       placeholder="Найти"
                       clearable>
         </v-text-field>
     </v-app-bar>
-    <v-infinite-scroll :onLoad="loadFilms">
+    <v-infinite-scroll :onLoad="loadFilms" color="deep-purple-lighten-1">
         <v-container>
             <v-row align="center" justify="center">
                 <v-col v-for="film in films"
@@ -31,11 +31,12 @@
     <v-dialog v-model="errorDialog" transition="dialog-bottom-transition" width="auto">
         <v-card>
             <v-toolbar color="deep-purple-lighten-1" title="Ошибка загрузки"></v-toolbar>
-            <v-card-text class="text-h5 pa-8">{{ errorDialogMessage }}</v-card-text>
+            <v-card-text style="color: #7E57C2" class="text-h5 pa-8">{{ errorDialogMessage }}</v-card-text>
             <v-card-actions class="justify-end">
                 <v-btn
-                    variant="tonal"
-                    class="text-h5"
+                    variant="text"
+                    class="text-h5 ma-3"
+                    color="deep-purple-lighten-1"
                     @click="errorDialog=false">
                     Закрыть
                 </v-btn>
@@ -103,7 +104,6 @@ export default {
             }
         },
 
-        // TODO
         setFilter: _.debounce(function () {
             this.films = [];
             this.page = 0;
@@ -118,5 +118,5 @@ export default {
             });
         }
     }
-}
+};
 </script>

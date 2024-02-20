@@ -1,5 +1,5 @@
 import {createRouter, createWebHistory} from "vue-router";
-import FavoriteFilms from "@/components/FavoriteFilms";
+import FavoritesFilms from "@/components/FavoritesFilms";
 import Index from "@/components";
 import FilmDetails from "@/components/FilmDetails";
 
@@ -15,7 +15,7 @@ const router = createRouter({
         {
             path: "/favorites",
             name: "favoritesPage",
-            component: FavoriteFilms
+            component: FavoritesFilms
         },
         {
             path: "/film/:id",

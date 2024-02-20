@@ -1,33 +1,29 @@
 <template>
-    <v-card
-        class="mx-auto"
-        max-width="350px"
-        hover>
-        <router-link :to="`/film/${film.id}`" style="text-decoration: none;">
+    <v-card class="mx-auto" max-width="350px" hover>
+        <router-link :to="`/film/${film.id}`" style="text-decoration: none; color: #7E57C2;">
             <v-card-item>
                 <div>
-                    <div class="mb-1 text-h7 text-md-h6 font-weight-bold">{{ film.title }}</div>
+                    <div class="mb-1 text-xl-h6 font-weight-bold">{{ film.title }}</div>
                     <div>
-                        <v-img :src="`https://image.tmdb.org/t/p/w500${film.poster_path}`"
-                               cover></v-img>
+                        <v-img :src="`https://image.tmdb.org/t/p/w500${film.poster_path}`" cover></v-img>
                     </div>
                     <div class="font-weight-bold">{{ getGenresNames }}</div>
                 </div>
             </v-card-item>
         </router-link>
         <v-card-actions>
-            <v-btn size="medium"
-                   color="green-lighten-1"
+            <v-btn size="small"
+                   color="green"
                    prepend-icon="mdi-movie"
-                   class="text-h6"
+                   class="text-xl-h6"
                    @click="showFilmDetails">
                 Подробнее
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn size="medium"
+            <v-btn size="small"
                    :color="favoriteFilmButtonColor"
                    append-icon="mdi-heart"
-                   class="text-h6"
+                   class="text-xl-h6"
                    @click="setFavoriteMode">
                 Добавить
             </v-btn>
@@ -36,7 +32,7 @@
 </template>
 
 <script>
-import {useFavoritesFilmsStore} from "@/store/FavoritesFilmsStore"
+import {useFavoritesFilmsStore} from "@/store/FavoritesFilmsStore";
 
 export default {
     name: "Film",
@@ -62,22 +58,22 @@ export default {
         },
 
         favoriteFilmButtonColor() {
-            return this.store.contains(this.film.id)? "red": "grey"
+            return this.store.containsFilmInFavorites(this.film.id)? "red-accent-4": "grey-darken-1";
         }
     },
 
     methods: {
         showFilmDetails() {
-            this.$router.push({path: `/film/${this.film.id}`})
+            this.$router.push({path: `/film/${this.film.id}`});
         },
 
         setFavoriteMode() {
-            if (!this.store.contains(this.film.id)) {
-                this.store.add(this.film)
+            if (!this.store.containsFilmInFavorites(this.film.id)) {
+                this.store.addFilmToFavorites(this.film);
             } else {
-                this.store.remove(this.film.id);
+                this.store.removeFilmFromFavorites(this.film.id);
             }
         }
     }
-}
+};
 </script>

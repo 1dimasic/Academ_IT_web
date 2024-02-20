@@ -8,15 +8,15 @@ export const useFavoritesFilmsStore = defineStore("favoritesFilms", {
     },
 
     actions: {
-        add(film) {
+        addFilmToFavorites(film) {
             this.items.push(film);
         },
 
-        remove(filmId) {
+        removeFilmFromFavorites(filmId) {
             this.items = this.items.filter(item => item.id !== filmId);
         },
 
-        contains(filmId) {
+        containsFilmInFavorites(filmId) {
             return Boolean(this.items.find(item => item.id === filmId));
         }
     }

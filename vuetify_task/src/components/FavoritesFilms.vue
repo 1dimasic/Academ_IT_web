@@ -15,26 +15,25 @@
                     max-width="350px">
                     <v-card-item>
                         <div>
-                            <div class="mb-1 text-lg-h6 font-weight-bold">{{ film.title }}</div>
+                            <div class="mb-1 text-xl-h6 font-weight-bold">{{ film.title }}</div>
                             <div>
-                                <v-img :src="`https://image.tmdb.org/t/p/w500${film.poster_path}`"
-                                       cover></v-img>
+                                <v-img :src="`https://image.tmdb.org/t/p/w500${film.poster_path}`" cover></v-img>
                             </div>
                         </div>
                     </v-card-item>
                     <v-card-actions>
-                        <v-btn size="medium"
-                               color="green-lighten-1"
+                        <v-btn size="small"
+                               color="green"
                                prepend-icon="mdi-movie"
-                               class="text-h6"
+                               class="text-xl-h6"
                                @click="showFilmDetails(film.id)">
                             Подробнее
                         </v-btn>
                         <v-spacer></v-spacer>
-                        <v-btn size="medium"
-                               color="red"
+                        <v-btn size="small"
+                               color="red-accent-4"
                                append-icon="mdi-heart"
-                               class="text-h6"
+                               class="text-xl-h6"
                                @click="removeFilmFromFavorites(film.id)">
                             Удалить
                         </v-btn>
@@ -49,7 +48,7 @@
 import {useFavoritesFilmsStore} from "@/store/FavoritesFilmsStore";
 
 export default {
-    name: "FavoriteFilms",
+    name: "FavoritesFilms",
 
     data() {
         return {
@@ -59,12 +58,12 @@ export default {
 
     methods: {
         removeFilmFromFavorites(filmId) {
-            this.store.remove(filmId);
+            this.store.removeFilmFromFavorites(filmId);
         },
 
         showFilmDetails(filmId) {
-            this.$router.push({path: `/film/${filmId}`})
+            this.$router.push({path: `/film/${filmId}`});
         }
     }
-}
+};
 </script>
