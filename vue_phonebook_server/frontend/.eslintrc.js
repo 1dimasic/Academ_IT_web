@@ -31,7 +31,7 @@ module.exports = {
         "eqeqeq": ["error", "always"],
         "curly": "error",
         "quotes": ["error", "double"],
-        "no-multiple-empty-lines": ["error", { "max": 1}],
+        "no-multiple-empty-lines": ["error", {"max": 1}],
         "comma-dangle": ["error", "never"],
         "semi": ["error", "always"]
     }

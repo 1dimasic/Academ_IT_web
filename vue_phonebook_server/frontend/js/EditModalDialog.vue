@@ -55,6 +55,10 @@ export default {
 
     emits: ["save"],
 
+    props: {
+        editedContact: Object
+    },
+
     data() {
         return {
             modal: null,
@@ -67,6 +71,17 @@ export default {
 
     mounted() {
         this.modal = new Modal(this.$refs.modal, {});
+    },
+
+    watch: {
+        editedContact: function () {
+            if (this.editedContact) {
+                this.id = this.editedContact.id;
+                this.name = this.editedContact.name;
+                this.surname = this.editedContact.surname;
+                this.phoneNumber = this.editedContact.phoneNumber;
+            }
+        }
     },
 
     computed: {
@@ -93,12 +108,7 @@ export default {
     },
 
     methods: {
-        show(contact) {
-            this.id = contact.id;
-            this.name = contact.name;
-            this.surname = contact.surname;
-            this.phoneNumber = contact.phoneNumber;
-
+        show() {
             this.modal.show();
         },
 

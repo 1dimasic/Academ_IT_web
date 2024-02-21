@@ -47,8 +47,11 @@
                 </div>
             </div>
         </div>
-        <delete-modal-dialog ref="deleteConfirmModalDialog" @remove="deleteContact"></delete-modal-dialog>
-        <edit-modal-dialog ref="editConfirmModalDialog" @save="saveContact"></edit-modal-dialog>
+        <delete-modal-dialog ref="deleteConfirmModalDialog" @remove="deleteContacts"></delete-modal-dialog>
+        <edit-modal-dialog :editedContact="editedContact"
+                           ref="editConfirmModalDialog"
+                           @save="saveContact">
+        </edit-modal-dialog>
         <validation-error-dialog ref="validationErrorDialog">
             <template #validationErrorMessage>{{ validationErrorMessage }}</template>
         </validation-error-dialog>
@@ -80,7 +83,7 @@ export default {
             selectedContactsIds: [],
             selectAll: false,
             service: new PhoneBookService(),
-            editContact: null,
+            editedContact: null,
             deletedContacts: null,
             validationErrorMessage: "",
             term: ""
@@ -118,13 +121,16 @@ export default {
         },
 
         showDeleteModalDialog(deletedContacts) {
-            this.deletedContacts = deletedContacts;
+            this.deletedContacts = this.contacts
+                .filter(contact => deletedContacts.includes(contact.id))
+                .map(contact => contact.id);
+
             this.$refs.deleteConfirmModalDialog.show();
         },
 
         showEditModalDialog(contact) {
-            this.editContact = contact;
-            this.$refs.editConfirmModalDialog.show(this.editContact);
+            this.editedContact = contact;
+            this.$refs.editConfirmModalDialog.show();
         },
 
         saveContact(contactToSave) {
@@ -142,26 +148,24 @@ export default {
             });
         },
 
-        deleteContact() {
-            this.deletedContacts.forEach(contactId => {
-                this.service.deleteContact(contactId).then(response => {
-                    if (!response.success) {
-                        this.validationErrorMessage = response.message;
-                        this.$refs.validationErrorDialog.show();
-                    }
-                }).catch(() => {
-                    this.validationErrorMessage = "Ошибка удаления контакта";
+        deleteContacts() {
+            this.service.deleteContact(this.deletedContacts).then(response => {
+                if (!response.success) {
+                    this.validationErrorMessage = response.message;
                     this.$refs.validationErrorDialog.show();
-                });
+                } else {
+                    this.selectedContactsIds = this.selectedContactsIds
+                        .filter(id => !this.deletedContacts.includes(id));
+                    this.deletedContacts = [];
+                    this.selectAll = false;
+
+                    this.$refs.deleteConfirmModalDialog.hide();
+                    this.loadContacts();
+                }
+            }).catch(() => {
+                this.validationErrorMessage = "Ошибка удаления контактов";
+                this.$refs.validationErrorDialog.show();
             });
-
-            this.selectedContactsIds = this.selectedContactsIds
-                .filter(id => !this.deletedContacts.includes(id));
-            this.deletedContacts = [];
-            this.selectAll = false;
-
-            this.$refs.deleteConfirmModalDialog.hide();
-            this.loadContacts();
         },
 
         searchContacts(term) {

@@ -21,10 +21,15 @@ router.get("/api/contacts", function (req, res) {
     res.send(contactsToShow);
 });
 
-router.delete("/api/contacts/:id", function (req, res) {
-    const id = Number(req.params.id);
+router.delete("/api/contacts", function (req, res) {
+    let ids = req.query.id;
 
-    contacts = contacts.filter(contact => contact.id !== id);
+    if (ids.length === 1) {
+        ids = [ids];
+    }
+
+    ids = ids.map(id => Number(id));
+    contacts = contacts.filter(contact => !ids.includes(contact.id));
 
     res.send({
         success: true,
@@ -35,7 +40,7 @@ router.delete("/api/contacts/:id", function (req, res) {
 router.post("/api/contacts", function (req, res) {
     const contact = {
         name: req.body.name,
-        surname: req.body.name,
+        surname: req.body.surname,
         phoneNumber: req.body.phoneNumber
     };
 

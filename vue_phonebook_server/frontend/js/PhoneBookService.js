@@ -27,8 +27,11 @@ export default class PhoneBookService {
         return executeGet(this.baseUrl, {term});
     }
 
-    deleteContact(id) {
-        return executeDelete(`${this.baseUrl}/${id}`);
+    deleteContact(ids) {
+        const queryString = new URLSearchParams();
+        ids.forEach(id => queryString.append("id", id));
+
+        return executeDelete(`${this.baseUrl}/?${queryString}`);
     }
 
     addContact(contact) {
