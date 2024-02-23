@@ -1,41 +1,31 @@
 Vue.createApp({
     data() {
         return {
-            contacts: [
-                {
-                    id: 1,
-                    name: "bob",
-                    surname: "dilan",
-                    phoneNumber: "123"
-                },
-                {
-                    id: 2,
-                    name: "sue",
-                    surname: "dilan",
-                    phoneNumber: "456"
-                }
-            ],
-            contactId: 3,
+            contacts: [],
+            contactId: 0,
             selectAll: false,
-            selectedContacts: [],
+            selectedContactsIds: [],
             searchingString: "",
-            deletedContacts: []
+            deletedContactsIds: []
         };
     },
 
     computed: {
         isAnyContactsChecked() {
-            return this.selectedContacts.length !== 0;
+            return this.selectedContactsIds.length !== 0;
         },
 
-        contactsToShow() {
-            return this.contacts.filter(contact => contact.name.includes(this.searchingString) || contact.surname.includes(this.searchingString) || contact.phoneNumber.includes(this.searchingString));
+        filteredContacts() {
+            const upperCaseSearchingString = this.searchingString.toUpperCase();
+            return this.contacts.filter(contact => contact.name.toUpperCase().includes(upperCaseSearchingString)
+                || contact.surname.toUpperCase().includes(upperCaseSearchingString)
+                || contact.phoneNumber.toUpperCase().includes(upperCaseSearchingString));
         }
     },
 
     methods: {
         addContact(contact) {
-            this.contactId += 1;
+            this.contactId++;
             contact.id = this.contactId;
 
             this.contacts.push(contact);
@@ -49,32 +39,33 @@ Vue.createApp({
             contactToSave.phoneNumber = contact.phoneNumber;
         },
 
-        removeContacts() {
-            this.deletedContacts.forEach(contactId => {
+        deleteContacts() {
+            this.deletedContactsIds.forEach(contactId => {
                 this.contacts = this.contacts.filter(contact => contact.id !== contactId);
-                this.selectedContacts = this.selectedContacts.filter(id => id !== contactId);
+                this.selectedContactsIds = this.selectedContactsIds.filter(id => id !== contactId);
             });
 
-            this.selectAll = this.selectedContacts.length !== 0;
+            this.selectAll = this.selectedContactsIds.length !== 0;
             this.$refs.modal.hide();
         },
 
         selectContacts(contactId) {
-            if (this.selectedContacts.includes(contactId)) {
-                this.selectedContacts = this.selectedContacts.filter(id => id !== contactId);
+            if (this.selectedContactsIds.includes(contactId)) {
+                this.selectedContactsIds = this.selectedContactsIds.filter(id => id !== contactId);
                 return;
             }
 
-            this.selectedContacts.push(contactId);
+            this.selectedContactsIds.push(contactId);
         },
 
         selectAllContacts() {
             this.selectAll = !this.selectAll;
-            this.selectedContacts = this.selectAll ? this.contacts.map(contact => contact.id) : [];
+            this.selectedContactsIds = this.selectAll ? this.contacts.map(contact => contact.id) : [];
         },
 
-        showDeleteConfirmDialog(deletedContacts) {
-            this.deletedContacts = deletedContacts;
+        showDeleteConfirmDialog(deletedContactsIds) {
+            const filteredContactsIds = this.filteredContacts.map(contact => contact.id);
+            this.deletedContactsIds = deletedContactsIds.filter(id => filteredContactsIds.includes(id));
             this.$refs.modal.show();
         }
     },
@@ -92,43 +83,41 @@ Vue.createApp({
             <input type="text" id="filter" v-model="searchingString" class="form-control">
         </div>
         </div>
-        <div class="row mt-3 table-responsive{-lg}">
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th>№</th>
-                <th>Имя</th>
-                <th>Фамилия</th>
-                <th>Номер телефона</th>
-                <th></th>
-                <th>
-                    <input type="checkbox" @click="selectAllContacts" v-model="selectAll">
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <contact v-for="(contact, index) in contactsToShow"
-                     :key="contact.id"
-                     :selectAll="selectAll"
-                     :contacts="contacts"
-                     :contact="contact"
-                     :index="index"
-                     @save="saveContact"
-                     @select="selectContacts"
-                     @showDeleteConfirmDialog="showDeleteConfirmDialog">
-            </contact>
-            </tbody>
+        <table class="mt-3 table table-hover table-responsive-lg">
+        <thead>
+        <tr>
+            <th>№</th>
+            <th>Имя</th>
+            <th>Фамилия</th>
+            <th>Номер телефона</th>
+            <th></th>
+            <th>
+                <input type="checkbox" @click="selectAllContacts" v-model="selectAll">
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <contact v-for="(contact, index) in filteredContacts"
+                 :key="contact.id"
+                 :selectAll="selectAll"
+                 :contacts="contacts"
+                 :contact="contact"
+                 :index="index"
+                 @save="saveContact"
+                 @select="selectContacts"
+                 @showDeleteConfirmDialog="showDeleteConfirmDialog">
+        </contact>
+        </tbody>
         </table>
-        </div>
         <div class="row">
         <div>
             <button class="btn btn-danger float-end col-auto"
                     :disabled="!isAnyContactsChecked"
-                    @click="showDeleteConfirmDialog(selectedContacts)">Удалить
+                    @click="showDeleteConfirmDialog(selectedContactsIds)">Удалить
             </button>
         </div>
         </div>
-        <delete-confirm-modal-dialog ref="modal" @remove="removeContacts"></delete-confirm-modal-dialog>`
+        <delete-confirm-modal-dialog ref="modal" @deleteContacts="deleteContacts"></delete-confirm-modal-dialog>`
 })
     .component("DeleteConfirmModalDialog", {
         data() {
@@ -137,7 +126,7 @@ Vue.createApp({
             };
         },
 
-        emits: ["remove"],
+        emits: ["deleteContacts"],
 
         mounted() {
             this.modal = new bootstrap.Modal(this.$refs.modal, {});
@@ -152,8 +141,8 @@ Vue.createApp({
                 this.modal.hide();
             },
 
-            remove() {
-                this.$emit("remove");
+            deleteContacts() {
+                this.$emit("deleteContacts");
             }
         },
 
@@ -175,7 +164,7 @@ Vue.createApp({
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
-                        <button type="button" class="btn btn-danger" @click="remove">Удалить</button>
+                        <button type="button" class="btn btn-danger" @click="deleteContacts">Удалить</button>
                     </div>
                 </div>
             </div>
@@ -196,15 +185,30 @@ Vue.createApp({
         emits: ["save", "select", "showDeleteConfirmDialog"],
 
         props: {
-            contacts: Array,
-            contact: Object,
-            index: Number,
-            selectAll: Boolean
+            contacts: {
+                type: Array,
+                required: true
+            },
+
+            contact: {
+                type: Object,
+                required: true
+            },
+
+            index: {
+                type: Number,
+                required: true
+            },
+
+            selectAll: {
+                type: Boolean,
+                required: true
+            }
         },
 
         watch: {
-            selectAll(newSelectAll) {
-                this.isChecked = newSelectAll;
+            selectAll(newValue) {
+                this.isChecked = newValue;
             }
         },
 
@@ -235,9 +239,9 @@ Vue.createApp({
                     name: this.name,
                     surname: this.surname,
                     phoneNumber: this.phoneNumber
-                }
+                };
 
-                this.$emit("save", contactToSave)
+                this.$emit("save", contactToSave);
                 this.isEditMode = false;
             },
 
@@ -246,9 +250,9 @@ Vue.createApp({
                 this.isChecked = !this.isChecked;
             },
 
-            showDeleteConfirmDialog() {
+            deleteContact() {
                 this.$emit("showDeleteConfirmDialog", [this.contact.id]);
-            },
+            }
         },
 
         computed: {
@@ -273,7 +277,7 @@ Vue.createApp({
                 };
             },
 
-            errorPhoneNumberValidationMessage() {
+            phoneNumberErrorMessage() {
                 return this.isRepeatedPhoneNumber ? "Введен существующий номер" : "Введите номер телефона";
             },
 
@@ -296,7 +300,7 @@ Vue.createApp({
                 </button>
                 <button type="button"
                         class="btn btn-sm btn-danger mt-1 mt-md-0"
-                        @click="showDeleteConfirmDialog">
+                        @click="deleteContact">
                     Удалить
                 </button>
             </td>
@@ -328,7 +332,7 @@ Vue.createApp({
                        class="form-control"
                        :class="phoneNumberValidationClass">
                 <div class="invalid-feedback">
-                    {{ errorPhoneNumberValidationMessage }}
+                    {{ phoneNumberErrorMessage }}
                 </div>
             </td>
             <td>
@@ -338,7 +342,7 @@ Vue.createApp({
                     Сохранить
                 </button>
                 <button type="button"
-                        class="btn btn-sm btn-secondary mt-1 mt-md-0"
+                        class="btn btn-sm btn-secondary mt-1 mt-sm-0"
                         @click="cancel">
                     Отменить
                 </button>
@@ -354,51 +358,55 @@ Vue.createApp({
                 name: "",
                 surname: "",
                 phoneNumber: "",
-                isAttemptToAdd: false
+                isAddContactAttempt: false
             };
         },
 
         emits: ["add"],
 
         props: {
-            contacts: Array
+            contacts: {
+                type: Array,
+                required: true
+            }
         },
 
         computed: {
             nameValidationClass() {
                 return {
                     "is-valid": this.name.length !== 0,
-                    "is-invalid": this.name.length === 0 && this.isAttemptToAdd
+                    "is-invalid": this.name.length === 0 && this.isAddContactAttempt
                 };
             },
 
             surnameValidationClass() {
                 return {
                     "is-valid": this.surname.length !== 0,
-                    "is-invalid": this.surname.length === 0 && this.isAttemptToAdd
+                    "is-invalid": this.surname.length === 0 && this.isAddContactAttempt
                 };
             },
 
             phoneValidationClass() {
                 return {
                     "is-valid": this.phoneNumber.length !== 0,
-                    "is-invalid": (this.phoneNumber.length === 0 && this.isAttemptToAdd) || this.isRepeatedPhoneNumber
+                    "is-invalid": (this.phoneNumber.length === 0 && this.isAddContactAttempt)
+                        || this.isRepeatedPhoneNumber
                 };
             },
 
-            errorPhoneNumberValidationMessage() {
+            phoneNumberErrorMessage() {
                 return this.isRepeatedPhoneNumber ? "Введен существующий номер" : "Введите номер телефона";
             },
 
             isRepeatedPhoneNumber() {
-                return this.contacts.some(contact => contact.phoneNumber === this.phoneNumber)
+                return this.contacts.some(contact => contact.phoneNumber === this.phoneNumber);
             }
 
         },
 
         methods: {
             submit() {
-                this.isAttemptToAdd = this.name.length === 0 || this.surname.length === 0 || this.phoneNumber.length === 0;
+                this.isAddContactAttempt = this.name.length === 0 || this.surname.length === 0 || this.phoneNumber.length === 0;
 
                 if (this.nameValidationClass["is-invalid"] || this.surnameValidationClass["is-invalid"] || this.phoneValidationClass["is-invalid"]) {
                     return;
@@ -452,7 +460,7 @@ Vue.createApp({
                            class="form-control"
                            :class="phoneValidationClass"
                            required>
-                    <div class="invalid-feedback">{{ errorPhoneNumberValidationMessage }}</div>
+                    <div class="invalid-feedback">{{ phoneNumberErrorMessage }}</div>
                 </div>
             </div>
             <div class="row mt-3">
