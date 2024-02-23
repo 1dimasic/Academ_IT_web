@@ -68,7 +68,8 @@ body {
     margin-top: 10px;
 }
 
-.todo_item > .inline {
+.inline {
+    vertical-align: top;
     display: inline-block;
 }
 
@@ -115,4 +116,5 @@ body {
     font-size: 16px;
     display: block;
     border: 0;
+    text-indent: 12px;
 }

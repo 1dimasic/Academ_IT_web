@@ -6,17 +6,6 @@ $(function () {
     form.submit(function (e) {
         e.preventDefault();
 
-        function setTodoItem() {
-            addedTodoTask.html(`
-                <div class="task_text inline"></div>
-                <div class="inline">
-                    <button type="button" class="button delete_button">Удалить</button>
-                    <button type="button" class="button edit_button">Редактировать</button>              
-                </div>`);
-
-            addedTodoTask.find(".task_text").text(newTaskText);
-        }
-
         let newTaskText = newTaskInput.val().trim();
         newTaskInput.removeClass("invalid");
 
@@ -26,16 +15,25 @@ $(function () {
         }
 
         const addedTodoTask = $("<li>").addClass("todo_item");
-        setTodoItem();
         todoList.append(addedTodoTask);
 
         function setViewMode() {
+            addedTodoTask.html(`
+                <div class="task_text inline"></div>
+                <div class="inline">
+                    <button type="button" class="button delete_button">Удалить</button>
+                    <button type="button" class="button edit_button">Редактировать</button>              
+                </div>`);
+
+            addedTodoTask.find(".task_text").text(newTaskText);
+
             addedTodoTask.find(".delete_button").click(function () {
                 addedTodoTask.remove();
             });
 
             addedTodoTask.find(".edit_button").click(function () {
-                addedTodoTask.html(`<input type="text" class="edit_task_field">                            
+                addedTodoTask.html(`
+                    <input type="text" class="edit_task_field">                            
                     <button type="button" class="button cancel_button">Отменить</button>
                     <button type="button" class="button save_button">Сохранить</button>
                     <div class="error_message">Введите текст задачи</div>`);
@@ -43,7 +41,6 @@ $(function () {
                 const editTaskInput = addedTodoTask.find(".edit_task_field").val(newTaskText);
 
                 addedTodoTask.find(".cancel_button").click(function () {
-                    setTodoItem();
                     setViewMode();
                 });
 
@@ -57,7 +54,6 @@ $(function () {
                     }
 
                     newTaskText = editTaskText;
-                    setTodoItem();
                     setViewMode();
                 });
 
