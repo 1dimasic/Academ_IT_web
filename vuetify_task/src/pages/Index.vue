@@ -1,5 +1,5 @@
 <template>
-    <v-app-bar color="deep-purple-lighten-3">
+    <v-app-bar color="light-blue-darken-2">
         <v-toolbar-title class="text-xl-h4 text-md-h5 v-col-4">Кинотеатр</v-toolbar-title>
         <router-link to="/favorites">
             <v-btn prepend-icon="mdi-movie-open-star" color="white" class="text-xl-h4 text-md-h6">
@@ -13,7 +13,8 @@
                       clearable>
         </v-text-field>
     </v-app-bar>
-    <v-infinite-scroll :onLoad="loadFilms" color="deep-purple-lighten-1">
+
+    <v-infinite-scroll :onLoad="loadFilms" :films="films" color="light-blue-darken-2" width="100%">
         <v-container>
             <v-row align="center" justify="center">
                 <v-col v-for="film in films"
@@ -23,20 +24,21 @@
                        md="4"
                        sm="6"
                        xs="12">
-                    <film :film="film" :genres="genres"></film>
+                    <film :film="film"></film>
                 </v-col>
             </v-row>
         </v-container>
     </v-infinite-scroll>
+
     <v-dialog v-model="errorDialog" transition="dialog-bottom-transition" width="auto">
         <v-card>
-            <v-toolbar color="deep-purple-lighten-1" title="Ошибка загрузки"></v-toolbar>
-            <v-card-text style="color: #7E57C2" class="text-h5 pa-8">{{ errorDialogMessage }}</v-card-text>
+            <v-toolbar color="light-blue-darken-4" title="Ошибка загрузки"></v-toolbar>
+            <v-card-text style="color: #01579B" class="text-h5 pa-8">{{ errorDialogMessage }}</v-card-text>
             <v-card-actions class="justify-end">
                 <v-btn
                     variant="text"
                     class="text-h5 ma-3"
-                    color="deep-purple-lighten-1"
+                    color="light-blue-darken-4"
                     @click="errorDialog=false">
                     Закрыть
                 </v-btn>
@@ -49,7 +51,7 @@
 import CinemaService from "@/components/CinemaService";
 import _ from "lodash";
 import Film from "@/components/Film.vue";
-import {useFavoritesFilmsStore} from "@/store/FavoritesFilmsStore";
+import {useGenresStore} from "@/store/GenresStore";
 
 export default {
     name: "Index",
@@ -57,13 +59,12 @@ export default {
     data() {
         return {
             films: [],
-            genres: [],
             term: "",
             page: 0,
-            store: useFavoritesFilmsStore(),
             service: new CinemaService(),
             errorDialog: false,
-            errorDialogMessage: ""
+            errorDialogMessage: "",
+            genresStore: useGenresStore()
         };
     },
 
@@ -76,46 +77,52 @@ export default {
     },
 
     watch: {
-        term(newValue) {
-            this.setFilter(newValue);
-        }
+        term: _.debounce(async function () {
+            this.films = [];
+            this.page = 0;
+            await this.loadFilms(() => {
+            });
+        }, 500)
     },
 
     methods: {
-        async loadFilms({done}) {
-            this.page += 1;
+        async api() {
+            return new Promise(resolve => {
+                this.page++;
 
-            if (!this.term) {
-                this.service.loadPopularsFilms(this.page).then(response => {
-                    this.films = this.films.concat(response.data.results);
-                    done("ok");
-                }).catch(() => {
-                    this.errorDialog = true;
-                    this.errorDialogMessage = "Не удалось загрузить фильмы";
-                });
+                if (!this.term) {
+                    this.service.loadPopularsFilms(this.page).then(response => {
+                        resolve(response.data.results);
+                    }).catch(() => this.showErrorDialog("Не удалось загрузить фильмы"));
+                } else {
+                    this.service.loadSearchingFilms(this.term, this.page).then(response => {
+                        resolve(response.data.results);
+                    }).catch(() => this.showErrorDialog("Не удалось загрузить фильмы"));
+                }
+            });
+        },
+
+        async loadFilms({done}) {
+            const onOnePageFilms = await this.api();
+
+            if (onOnePageFilms.length === 0) {
+                done("empty");
             } else {
-                this.service.loadSearchingFilms(this.term, this.page).then(response => {
-                    this.films = this.films.concat(response.data.results);
-                    done("ok");
-                }).catch(() => {
-                    this.errorDialog = true;
-                    this.errorDialogMessage = "Не удалось загрузить фильмы";
-                });
+                this.films.push(...onOnePageFilms);
+                this.films = Array.from(new Set(this.films));
+                done("ok");
             }
         },
 
-        setFilter: _.debounce(function () {
-            this.films = [];
-            this.page = 0;
-        }, 500),
-
         loadGenres() {
             this.service.loadGenres().then(response => {
-                this.genres = response.data.genres;
-            }).catch(() => {
-                this.errorDialog = true;
-                this.errorDialogMessage = "Не удалось загрузить наименования жанров";
-            });
+                this.genresStore.genres = response.data.genres;
+            }).catch(() => this.showErrorDialog("Не удалось загрузить наименования жанров"));
+        },
+
+        showErrorDialog(errorDialogMessage) {
+            this.errorDialogMessage = errorDialogMessage;
+            this.errorDialog = true;
         }
     }
 };

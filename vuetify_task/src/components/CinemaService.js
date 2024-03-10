@@ -53,7 +53,6 @@ export default class CinemaService {
                 api_key: this.apiKey,
                 language: this.language
             }
-        })
+        });
     }
-
 }

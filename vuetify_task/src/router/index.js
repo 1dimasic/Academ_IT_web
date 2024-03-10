@@ -1,7 +1,7 @@
 import {createRouter, createWebHistory} from "vue-router";
-import FavoritesFilms from "@/components/FavoritesFilms";
-import Index from "@/components";
-import FilmDetails from "@/components/FilmDetails";
+import FavoritesFilms from "@/pages/FavoritesFilms";
+import Index from "@/pages/Index";
+import FilmDetails from "@/pages/FilmDetails";
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
